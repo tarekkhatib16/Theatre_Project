@@ -12,6 +12,16 @@ public class InputEngine {
 	private InputReader reader;
 	private Transaction order;
 	private SQLConverter sql;
+	
+	/*
+	 * The main method: this is what happens when the programme is first run.
+	 * This creates an instance of the InputEngine and then triggers the start
+	 * method. 
+	 */
+	public static void main(String[] args) {
+    	InputEngine engine = new InputEngine();
+    	engine.start();
+	}
 
 	/*
 	 * Constructor where an instance of the InputReader class is created amongst
@@ -21,10 +31,6 @@ public class InputEngine {
 		reader = new InputReader();
 		order = new Transaction();
 		sql = new SQLConverter();
-	}
-	
-	public static void main(String[] args) {
-		this.start();
 	}
 	
 	/*
@@ -79,6 +85,8 @@ public class InputEngine {
 		System.out.println("by typing in the name of the show");
 		System.out.println("Finally, if you would like to check an existing order, type in your");
 		System.out.println("booking reference.");
+		System.out.println();
+		System.out.print("> ");
 	}
 
 	/*
