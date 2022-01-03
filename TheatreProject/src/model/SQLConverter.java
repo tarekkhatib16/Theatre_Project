@@ -10,17 +10,24 @@ public class SQLConverter {
 	}
 	
 	/*
-	 * Search by name
+	 * Search whether the name exists in the database.
 	 */
-	public void searchName(String name) {
-		
+	public boolean searchName(String name) {
+		return true;
 	}
 	
 	/*
-	 * Search by date
+	 * Return show information
 	 */
-	public void searchDate(String date) {
-		
+	public String getName(String name) {
+		return "Name";
+	}
+	
+	/*
+	 * Search for a specific performance
+	 */
+	public int searchPerformance(String date, String time) {
+		return 5;
 	}
 	
 	/*
@@ -47,7 +54,7 @@ public class SQLConverter {
 	}
 	
 	public String getPerformanceInformation(int perfID) {
-		return
+		return "Name";
 	}
 	
 }
