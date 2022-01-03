@@ -21,7 +21,9 @@ public class InputEngine {
 		reader = new InputReader();
 		order = new Transaction();
 		sql = new SQLConverter();
-
+	}
+	
+	public static void main(String[] args) {
 		this.start();
 	}
 	
@@ -105,10 +107,10 @@ public class InputEngine {
 		
 		for (int i = 0; i < (numberOfTickets-concessionary); i++) {
 			if (concessionary > 0) {
-				order.addTickets(i, performanceID, 1, true);
+				order.addTickets(i, performanceID, 1, 1);
 				concessionary--;
 			} else {
-				order.addTickets(i, performanceID, 1, false);
+				order.addTickets(i, performanceID, 1, 0);
 			}
 		}
 		

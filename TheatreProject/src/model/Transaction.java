@@ -29,7 +29,7 @@ public class Transaction {
 	 * Method to add ticket information to 3D ArrayList
 	 * 'tickets'.
 	 */
-	public void addTickets(int i, int x, int y, boolean z) {
+	public void addTickets(int i, int x, int y, int z) {
 		booking.get(i).add(0, x);
 		booking.get(i).add(1, y);
 		booking.get(i).add(2, z);
