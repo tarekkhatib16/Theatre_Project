@@ -40,7 +40,7 @@ public class SQLConverter {
 	/*
 	 * Finalise order and update SQL database to create a new booking.
 	 */
-	public void finaliseOrder() {
+	public void finaliseOrder(String name, String address, int creditCard) {
 
 	}
 
@@ -54,5 +54,19 @@ public class SQLConverter {
 	public String getPerformanceInformation(int perfID) {
 		return "Name";
 	}
-
+	
+	/*
+	 * Method to get the next available seat number for a specific performance ID.
+	 */
+	public int getNextSeat() {
+		return 1;
+	}
+	
+	/*
+	 * Method to get booking reference given all other information.
+	 */
+	public int getBookingReference() {
+		return 5;
+	}
+	
 }

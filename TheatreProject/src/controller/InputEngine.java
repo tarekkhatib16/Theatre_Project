@@ -54,6 +54,9 @@ public class InputEngine {
 				
 				System.out.println("if you would like to add tickets to this performance to your basket");
 				System.out.println("type in: add to basket");
+				System.out.println();
+				System.out.print("> ");
+				
 			} else if (input.contains("add to basket")) {
 				this.addTickets();
 			} else if (input.contains("see basket")) {
@@ -95,36 +98,50 @@ public class InputEngine {
 	public void addTickets() {
 		System.out.println("type in the date (dd/mm/yyyy) of the performance you would");
 		System.out.println("like to attend");
+		System.out.println();
+		System.out.print("> ");
 		
 		String date = reader.getInput();
 		
 		System.out.println("type in the time (hh:mm) of the performance you would like");
 		System.out.println("to attend");
+		System.out.println();
+		System.out.print("> ");
 		
 		String time = reader.getInput();
 		
 		System.out.println("How many tickets would you like to buy?");
+		System.out.println();
+		System.out.print("> ");
 		
 		int numberOfTickets = Integer.parseInt(reader.getInput());
 		
 		System.out.println("How many of these tickets are concessionary?");
+		System.out.println();
+		System.out.print("> ");
 		
 		int concessionary = Integer.parseInt(reader.getInput());
 		
 		int performanceID = sql.searchPerformance(date, time);
 		
+		int seatNumber = sql.getNextSeat();
+		
 		for (int i = 0; i < (numberOfTickets-concessionary); i++) {
 			if (concessionary > 0) {
-				order.addTickets(i, performanceID, 1, 1);
+				order.addTickets(i, performanceID, seatNumber, 1);
 				concessionary--;
+				seatNumber++;
 			} else {
-				order.addTickets(i, performanceID, 1, 0);
+				order.addTickets(i, performanceID, seatNumber, 0);
+				seatNumber++;
 			}
 		}
 		
 		System.out.println("Tickets were added to your basket. If you would like to see what");
 		System.out.println("is in your basket type: 'see basket'. Alternatively if you would");
 		System.out.println("like to checkout type: 'checkout'.");
+		System.out.println();
+		System.out.print("> ");
 	}
 
 	/*
@@ -138,7 +155,38 @@ public class InputEngine {
 	 * Method to finalise order in basket (i.e. check-out).
 	 */
 	public void finaliseOrder() {
-		sql.finaliseOrder();
+		System.out.println("Please type in your name.");
+		System.out.println();
+		System.out.print("> ");
+		
+		String purchaserName = reader.getInput();
+		
+		System.out.println("Please type in your address.");
+		System.out.println();
+		System.out.print("> ");
+		
+		String purchaserAddress = reader.getInput();
+		
+		System.out.println("Please type in your credit card number.");
+		System.out.println();
+		System.out.print("> ");
+		
+		int purchaserCreditCard = Integer.parseInt(reader.getInput());
+		
+		System.out.println("Please type in 'complete order' to complete purchase.");
+		System.out.println();
+		System.out.print("> ");
+		
+		if (reader.getInput() == "complete order") {
+			sql.finaliseOrder(purchaserName, purchaserAddress, purchaserCreditCard);
+			
+			int bookingReference = sql.getBookingReference();
+			
+			System.out.println("Order has been completed, your booking reference is:" + bookingReference);
+		} else {
+			System.out.println("Instruction has not been understood.");
+			System.out.println("Please type in 'complete order' to complete purchase.");
+		}
 	}
 
 	/*
