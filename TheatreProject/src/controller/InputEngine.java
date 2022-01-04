@@ -1,7 +1,12 @@
 package controller;
 
+import util.DBConnector;
 import util.InputReader;
 import model.Transaction;
+
+import java.sql.ResultSet;
+import java.util.HashMap;
+
 import model.SQLConverter;
 
 public class InputEngine {
@@ -65,6 +70,8 @@ public class InputEngine {
 				this.finaliseOrder();
 			} else if (input.contains("see order")) {
 				this.getOrder();
+			} else if (input.contains("quit")) {
+				finished = this.quit();
 			} else {
 				if (sql.searchName(input)) {
 					sql.getName(input);
@@ -83,11 +90,12 @@ public class InputEngine {
 	private void printWelcome() {
 		System.out.println("Welcome to the Theatre Royal website.");
 		System.out.println("If you would like to see the full catalogue of shows available");
-		System.out.println("type: show all shows");
+		System.out.println("type: 'show all shows'");
 		System.out.println("Alternatively, you are able to search for a specific performance");
 		System.out.println("by typing in the name of the show");
-		System.out.println("Finally, if you would like to check an existing order, type in your");
+		System.out.println("If you would like to check an existing order, type in your");
 		System.out.println("booking reference.");
+		System.out.println("Finally, if you would like to quit the application type in 'quit'.");
 		System.out.println();
 		System.out.print("> ");
 	}
@@ -177,7 +185,7 @@ public class InputEngine {
 		System.out.println();
 		System.out.print("> ");
 		
-		if (reader.getInput() == "complete order") {
+		if (reader.getInput().contains("complete order")) {
 			sql.finaliseOrder(purchaserName, purchaserAddress, purchaserCreditCard);
 			
 			int bookingReference = sql.getBookingReference();
@@ -196,5 +204,22 @@ public class InputEngine {
 		System.out.println("Your basket contains the following tickets:");
 		System.out.println(sql.getPerformanceInformation(0));
 	}
+	
+	/*
+	 * Close the programme
+	 */
+	private boolean quit() {
+        System.out.println("Are you sure? Type yes or no.");
+        System.out.println();
+		System.out.print("> ");
+		
+		if (reader.getInput().contains("yes")) {
+			return true;
+		} else {
+			return false;
+		}
+        
+        
+    }
 
 }

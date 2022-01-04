@@ -1,19 +1,48 @@
 package model;
 
+import java.sql.ResultSet;
+import java.util.HashMap;
+
+import util.DBConnector;
+
 public class SQLConverter {
 
 	/*
 	 * Constructor
 	 */
 	public SQLConverter() {
-
+		
 	}
 
 	/*
 	 * Search whether the name exists in the database.
+	 * 
+	 * Creates a db connector, then runs the SQL query that 
+	 * we want to run, then gets the result and sees whether 
+	 * the programme we searched for exists. If it does then
+	 * it returns true, if it does not exist in the results 
+	 * returned then it returns false. 
 	 */
 	public boolean searchName(String name) {
 		return true;
+		
+		String query = "INSERT SQL CODE HERE";
+
+		DBConnector db = new DBConnector(); 
+		db.connect();
+		
+		for (int i = 0; i < query.size(); i++) {
+			String line = query.get(i);
+			ResultSet results = db.runQuery(line);
+			if (results.contains(name)) {
+				return true;
+			} else { 
+				return false;
+			}
+			
+		}
+
+		db.close();
 	}
 
 	/*
