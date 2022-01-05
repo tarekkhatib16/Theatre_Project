@@ -1,6 +1,6 @@
 /*
 Stuart McClymont
-VERSION: SM_V2_2
+VERSION: SM_V2_2_1
 */
 
 -- Create Database
@@ -9,7 +9,11 @@ CREATE DATABASE FinalProjectTheatre;
 USE FinalProjectTheatre;
 
 -- Create a customer user for database
+DROP USER IF EXISTS 'customer'@'localhost';
 CREATE USER 'customer'@'localhost' IDENTIFIED BY 'password';
+GRANT SELECT ON finalprojecttheatre.* TO 'customer'@'localhost'; -- Allow to Search tables
+GRANT EXECUTE ON finalprojecttheatre.* TO 'customer'@'localhost'; -- Allow to Run Procedures
+-- *? will INSERT be needed to add to bookings? need to test
 
 /* -- Create EventInfo Table
 	Table for Details of Events Held at the Theatre
