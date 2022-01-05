@@ -1,12 +1,15 @@
 /*
 Stuart McClymont
-VERSION: SM_V2_0
+VERSION: SM_V2_2
 */
 
 -- Create Database
 DROP DATABASE IF EXISTS FinalProjectTheatre;
 CREATE DATABASE FinalProjectTheatre;
 USE FinalProjectTheatre;
+
+-- Create a customer user for database
+CREATE USER 'customer'@'localhost' IDENTIFIED BY 'password';
 
 /* -- Create EventInfo Table
 	Table for Details of Events Held at the Theatre

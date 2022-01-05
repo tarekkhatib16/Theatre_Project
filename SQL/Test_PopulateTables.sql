@@ -1,6 +1,6 @@
 /* Test Population Of tables via INSERT
 ADD end / from above INSERT to run, remove to comment out
-VERSION: SM_V2_1
+VERSION: SM_V2_2
 */
 
 /**
