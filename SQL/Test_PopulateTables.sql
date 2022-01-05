@@ -4,14 +4,19 @@ VERSION: SM_V2_0
 */
 
 /**
-INSERT INTO EventInfo(Title,EventType,Descrip,EventDurationMM,PricePence)
-VALUES('Manns Bands Stands','Musical','Mr Manns Band and the Hand lead the show with gusto and Glee. Join them for a merry laugh of love, life and lemers. Presented in English.', 120, 2700);
+INSERT INTO EventInfo(Title,EventType,LiveMusic,PerformerInfo,Descrip,Lang,EventDurationMM,PricePenceStall,PricePenceCircle)
+VALUES('Manns Bands Stands','Musical', TRUE, 'Mr Manns Band and the Hand', 'Lead the show with gusto and Glee. Join them for a merry laugh of love, life and lemers.' ,' English.', 120, 2700,2700);
+INSERT INTO EventInfo(Title,EventType,LiveMusic,Descrip,Lang,EventDurationMM,PricePenceStall,PricePenceCircle)
+VALUES('A','Theatre',FALSE,'A Description','French',120,1200,1200);
 /**/
 
 /**
 INSERT INTO Performances(EventID, PerformanceStart, AvailabilityOfTickets)
 VALUES(1, '2022-06-01 12:00:00', 200);
+INSERT INTO Performances(EventID, PerformanceStart, AvailabilityOfTickets)
+VALUES(2, '2022-06-01 12:00:00', 200);
 /**/
+
 
 /**
 INSERT INTO Purchasers(PurchaserName, DoB, AddressHouseNumber, AddressStreet, AddressCity,AddressCounty,AddressPostcode, CreditCard)

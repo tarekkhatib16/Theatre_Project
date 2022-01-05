@@ -15,14 +15,16 @@ DROP TABLE IF EXISTS EventInfo;
 CREATE TABLE EventInfo(
 	EventID INT PRIMARY KEY AUTO_INCREMENT,
     Title VARCHAR(50) NOT NULL, -- Name of Show
-	EventType VARCHAR(50) NOT NULL, -- Type of Show (Theatre show, Musical, Opera, Concert)
+	EventType VARCHAR(50) NOT NULL, -- Type of Show (Theatre, Musical, Opera, Concert)
     LiveMusic BOOL NOT NULL, -- indicate if live music is present at event
     PerformerInfo VARCHAR(100), -- fill in details only if live music is present
     Descrip VARCHAR(500) NOT NULL, -- Description of Show
     Lang VARCHAR(50) NOT NULL, -- Language of Performance
     EventDurationMM INT NOT NULL, -- Length of Event in Minutes
     PricePenceStall INT NOT NULL, -- Could use DECIMAL(6,2) to list as £, using INT for easier conversion to Java for now
-    PricePenceCircle INT NOT NULL -- Could use DECIMAL(6,2) to list as £, using INT for easier conversion to Java for now
+    PricePenceCircle INT NOT NULL, -- Could use DECIMAL(6,2) to list as £, using INT for easier conversion to Java for now
+    
+    CONSTRAINT chk_EventType CHECK ( EventType IN ('Theatre', 'Musical', 'Opera', 'Concert')) -- Event Type limited to one of four values
 );
 
 /* -- Create Performaces Table
