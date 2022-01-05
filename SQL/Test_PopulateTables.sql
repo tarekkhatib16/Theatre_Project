@@ -1,6 +1,6 @@
 /* Test Population Of tables via INSERT
 ADD end / from above INSERT to run, remove to comment out
-VERSION: SM_V2_0
+VERSION: SM_V2_1
 */
 
 /**
@@ -24,8 +24,8 @@ VALUES('Mikey Martel Martinson III', '1978-05-01', 'The Mikey Mansion','Makenbut
 /**/
 
 /**
-INSERT INTO Bookings(PerformanceID, PurchaserID, Concessionary)
-VALUES(1,1,FALSE);
+INSERT INTO Bookings(PerformanceID, PurchaserID, Concessionary,TicketPricePence)
+VALUES(1,1,FALSE,2700);
 /**/
 
 -- SELECT * FROM EventInfo;
