@@ -214,6 +214,7 @@ public class InputEngine {
 		System.out.print("> ");
 		
 		if (reader.getInput().contains("yes")) {
+			sql.changeFinished(true);
 			return true;
 		} else {
 			return false;
