@@ -1,7 +1,8 @@
 /*
 Test Stored Procedures
 
-VERSION: SM_V2_3: added tes for booking procedure (populate tables before running)
+VERSION: SM_V2_4: added test for bool search show
+				
 */
 
 /*
@@ -13,6 +14,12 @@ Test Return list of all Events from EventInfo
 Test Return list of all Events from EventInfo with Search term in Title
 */
 -- CALL GetShowsSearch('a');
+
+/*
+Test Return BOOL of all Events from EventInfo with Search term in Title
+*/
+-- CALL GetShowsSearchBool('a', @exist);
+-- SELECT @Exist;
 
 /*
 Test Return list of all Events with search term dates

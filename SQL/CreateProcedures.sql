@@ -1,6 +1,6 @@
 /*
 
-VERSION: SM_V2_3 : added booking Procedure
+VERSION: SM_V2_4 : added Bool search show procedure
 */
 
 /*
@@ -32,6 +32,20 @@ CREATE PROCEDURE GetShowsSearch(IN SearchQ VARCHAR(50))
 
 	END; //
 
+/*
+Procedure to return BOOL if show exists
+*/
+DROP PROCEDURE IF EXISTS finalprojecttheatre.GetShowsSearchBool//
+CREATE PROCEDURE GetShowsSearchBool(IN SearchQ VARCHAR(50), OUT Exist BOOLEAN)
+	BEGIN
+		IF EXISTS (SELECT Title
+		FROM EventInfo
+        WHERE Title LIKE CONCAT('%',SearchQ,'%')) -- find all Shows containg the search query
+        THEN SET Exist = TRUE;
+        ELSE SET Exist = FALSE;
+        END IF;
+
+	END; //
 
 /*
 Procedure to Browse all shows(events)
@@ -78,4 +92,18 @@ CREATE PROCEDURE SetBooking(IN PerfID INT, IN PurID INT, IN Conc BOOL, IN Stalls
         VALUES(PerfID, PurID, Conc, @Price);
         
         /*Return TRUE if Successful*/
+	END; //
+    
+    /*
+Procedure to Browse all shows(events)
+Return All Events from EventInfo where search Query contained withing Title
+*/
+
+DROP PROCEDURE IF EXISTS finalprojecttheatre.GetPerformanceInfo//
+CREATE PROCEDURE GetPerformanceInfo(IN PerfID INT)
+	BEGIN
+		SELECT *
+		FROM Performances
+        WHERE Performances.PerformanceID = PerfID; -- find all Shows containg the search query
+
 	END; //
