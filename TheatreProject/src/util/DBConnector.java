@@ -8,9 +8,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 public class DBConnector {
-	private String databaseUrl = "jdbc:mysql://localhost:3306/Bank_Using_Java";
-	private String user = "root";
-	private String password = "Pa$$word123";
+	private String databaseUrl = "jdbc:mysql://localhost:3306/finalprojecttheatre";
+	private String user = "customer";
+	private String password = "password";
 	private Connection conn;
 
 	public DBConnector() {

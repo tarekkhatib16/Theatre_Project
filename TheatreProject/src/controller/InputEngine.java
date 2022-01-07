@@ -50,7 +50,7 @@ public class InputEngine {
 		boolean finished = false;
 
 		printWelcome();
-
+		
 		while (!finished) {
 			String input = reader.getInput().toLowerCase();
 
