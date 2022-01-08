@@ -1,11 +1,13 @@
 package util;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+
 
 public class DBConnector {
 	private String databaseUrl = "jdbc:mysql://localhost:3306/finalprojecttheatre";
@@ -88,6 +90,15 @@ public class DBConnector {
 			e.printStackTrace();
 		}
 	}
+	/*
+	public void returnResults() {
+		try {
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	*/
 
 	public void close() {
 		try {

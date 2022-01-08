@@ -3,8 +3,6 @@ package model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.CallableStatement;
-import java.util.HashMap;
-
 import util.DBConnector;
 
 public class SQLConverter {
@@ -52,39 +50,38 @@ public class SQLConverter {
 		mySQLquery = "CALL GetShowsSearchBool('" + name + "', @exist)";
 		db.runQuery(mySQLquery);
 		rs = db.runQuery("SELECT @exist");
+		
 		boolean b = false;
 		try {
-			if(rs != null) {
+			if (rs != null) {
 				rs.last();
 			if (rs.getBoolean("@exist") == true) {
 				b = true;
 			}}
 		} catch (SQLException e) {
 		}
-
+		
 		return b;
 	}
 
 	/*
 	 * Return show information
 	 */
-	public String getName(String name) {
+	public void getName(String name) {
 		mySQLquery = "CALL GetShowsSearch('"+name+"')";
 		
 		rs = db.runQuery(mySQLquery);
-		printResults();
-		
-		return "Name";
+		db.printResults(rs);
 	}
 
 	/*
 	 * Search for a specific performance
 	 */
 	public int searchPerformance(String date, String time) {
-		mySQLquery = " CALL GetShowsDate('" + date + "')"; // Date must be in YYYY-MM-DD with hyphens
+		mySQLquery = "CALL GetShowsDate('" + date + "')"; // Date must be in YYYY-MM-DD with hyphens
 		
 		rs = db.runQuery(mySQLquery);
-		printResults();
+		db.printResults(rs);
 		
 		return 5;
 	}
@@ -96,12 +93,13 @@ public class SQLConverter {
 		mySQLquery = "CALL GetShows()";
 		rs= db.runQuery(mySQLquery);
 		db.printResults(rs);
+		
 	}
 
 	/*
 	 * Finalise order and update SQL database to create a new booking.
 	 */
-	public void finaliseOrder(String name, String address, int creditCard) {
+	public void finaliseOrder(String name, String address, String creditCard) {
 		mySQLquery = "CALL";
 		db.runQuery(mySQLquery);
 		
@@ -117,12 +115,13 @@ public class SQLConverter {
 		
 	}
 
-	public String getPerformanceInformation(int perfID) {
+	public int getPerformanceInformation(int perfID) {
 		String query = "Call GetPerformanceInfo("+ String.valueOf(perfID) + ")";
 		
 		rs = db.runQuery(query);
-		printResults();
-		return "Name";
+		db.printResults(rs);
+		
+		return 5;
 	}
 	
 	/*
