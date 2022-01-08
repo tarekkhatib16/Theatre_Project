@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 
 public class DBConnector {
@@ -61,6 +62,28 @@ public class DBConnector {
 		}
 
 	}
+	
+	/*
+	 * 4. Prepare a callable statement to run 5. Execute statement
+	 
+	public ArrayList<ResultSet> runProcedure(String sql, ArrayList<> array) {
+		CallableStatement cst = null; 
+		try {
+			cst = conn.prepareCall(sql);
+					
+					
+			for (int i = 0; i < sql.length(); i++) {
+				if (sql.charAt(i) == '?') {
+					
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println(sql + "\n failed to run.");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	*/
 
 	// 6. Process Results
 
