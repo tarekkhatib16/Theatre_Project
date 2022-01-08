@@ -29,8 +29,8 @@ Test Return list of all Events with search term dates
 /*
 Test input purchaser procedure
 */
-CALL InsertPurchaser('Mikey Martel Martinson III', '1978-05-01', 'The Mikey Mansion','Makenbut Road', 'Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch', 'Wasles Somewhere', 'WA345TT','1234123412341234');
-SELECT * From Purchasers;
+-- CALL InsertPurchaser('Mikey Martel Martinson III', '1978-05-01', 'The Mikey Mansion','Makenbut Road', 'Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch', 'Wasles Somewhere', 'WA345TT','1234123412341234');
+-- SELECT * From Purchasers;
 
 /*
 Test Book a ticket to event, should add ticket to Bookings, Reduce available seats from performance, log ticketprice and concession
@@ -40,3 +40,10 @@ Test Book a ticket to event, should add ticket to Bookings, Reduce available sea
 
 -- SELECT * FROM Bookings;
 -- SELECT * FROM Performances WHERE Performances.PerformanceID = 1;
+
+/*
+Test procedure search for date time
+*/
+-- CALL GetPerformanceID_DT("2022-06-01 12:00:00");
+
+-- CALL GetPerformances(1);
