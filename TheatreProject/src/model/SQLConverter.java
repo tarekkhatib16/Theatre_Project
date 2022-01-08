@@ -89,12 +89,17 @@ public class SQLConverter {
 	 * Search for a specific performance by UNIQUE identifier of Date/time
 	 */
 	public int searchPerformance(String date, String time) {
-		db.connect(); // open connection
 		
-		rs = db.runQuery("CALL");
-		db.close(); //close connection
+		db.connect();
+		String dateTime = date + " " + time;
 		
-		return 5;
+		mySQLquery = "CALL GetPerformanceID_DT('"+dateTime+"')";
+		rs = db.runQuery(mySQLquery);
+		
+		int perfID = Integer.parseInt(resultToString(db.compileResults(rs)));
+		db.close();
+		
+		return perfID;
 	}
 	
 	/*
@@ -129,13 +134,28 @@ public class SQLConverter {
 	/*
 	 * Finalise order and update SQL database to create a new booking.
 	 */
-	public void finaliseOrder(String name, String address, int creditCard) {
+	public void finaliseOrder(
+			String name, 
+			String DOB,
+			String addressHouseNumber,
+			String addressStreet, 
+			String addressCity, 
+			String addressCounty, 
+			String addressPostcode, 
+			int creditCard) {
 		db.connect(); // open connection
 		
-		mySQLquery = "CALL";
+		mySQLquery = "CALL AddToPurchaser('" 
+						+ name + "','" 
+						+ DOB + "','"
+						+ addressHouseNumber + "','"
+						+ addressStreet + "','"
+						+ addressCity + "','"
+						+ addressCounty + "','"
+						+ addressPostcode + "','"
+						+ creditCard + "')";
 		db.runQuery(mySQLquery);
 		db.close(); //close connection
-		
 	}
 
 	/*

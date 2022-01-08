@@ -169,11 +169,55 @@ public class InputEngine {
 		
 		String purchaserName = reader.getInput();
 		
-		System.out.println("Please type in your address.");
+		System.out.println("Please type in your birth year (yyyy).");
 		System.out.println();
 		System.out.print("> ");
 		
-		String purchaserAddress = reader.getInput();
+		String year = reader.getInput();
+		
+		System.out.println("Please type in your birth month (mm).");
+		System.out.println();
+		System.out.print("> ");
+		
+		String month = reader.getInput();
+		
+		System.out.println("Please type in your birth date (dd).");
+		System.out.println();
+		System.out.print("> ");
+		
+		String day = reader.getInput();
+		
+		String purchaserDOB = year + "-" + month + "-" + day;
+		
+		System.out.println("Please type in your House Number.");
+		System.out.println();
+		System.out.print("> ");
+		
+		String purchaserAddressHouseNumber = reader.getInput();
+		
+		System.out.println("Please type in your Street Name.");
+		System.out.println();
+		System.out.print("> ");
+		
+		String purchaserAddressStreet = reader.getInput();
+		
+		System.out.println("Please type in your City Name.");
+		System.out.println();
+		System.out.print("> ");
+		
+		String purchaserAddressCity = reader.getInput();
+		
+		System.out.println("Please type in your County.");
+		System.out.println();
+		System.out.print("> ");
+		
+		String purchaserAddressCounty = reader.getInput();
+		
+		System.out.println("Please type in your Postcode.");
+		System.out.println();
+		System.out.print("> ");
+		
+		String purchaserAddressPostcode = reader.getInput();
 		
 		System.out.println("Please type in your credit card number.");
 		System.out.println();
@@ -186,7 +230,15 @@ public class InputEngine {
 		System.out.print("> ");
 		
 		if (reader.getInput().contains("complete order")) {
-			sql.finaliseOrder(purchaserName, purchaserAddress, purchaserCreditCard);
+			sql.finaliseOrder(
+					purchaserName, 
+					purchaserDOB,
+					purchaserAddressHouseNumber,
+					purchaserAddressStreet, 
+					purchaserAddressCity, 
+					purchaserAddressCounty, 
+					purchaserAddressPostcode, 
+					purchaserCreditCard);
 			
 			int bookingReference = sql.getBookingReference();
 			
