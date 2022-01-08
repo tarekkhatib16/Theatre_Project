@@ -1,6 +1,7 @@
 /*
 
-VERSION: SM_V2_5 : added search procedure, return performaceID based on DATETIME
+VERSION: SM_V2_6 : added search procedure, return performaceID based on DATETIME
+					added add purchaser to table procedure
 */
 
 /*
@@ -104,12 +105,30 @@ CREATE PROCEDURE SetBooking(IN PerfID INT, IN PurID INT, IN Conc BOOL, IN Stalls
         
         /*Return TRUE if Successful*/
 	END; //
-    
-    /*
+
+/*
+Procedure to add person to purchaser table
+*/
+DROP PROCEDURE IF EXISTS finalprojecttheatre.InsertPurchaser//
+CREATE PROCEDURE InsertPurchaser(
+IN PurchaserName VARCHAR(100),
+IN DoB DATE, -- Format 'YYYY-MM-DD' AS STRING
+IN AddressHouseNumber VARCHAR(50), -- VARCHAR(50) to cover instances where house has name, flat B, 21A etc
+IN AddressStreet VARCHAR(60), -- 
+IN AddressCity VARCHAR (60), -- 
+IN AddressCounty VARCHAR(60), --
+IN AddressPostcode VARCHAR(7), -- Postcodes between 5 and 7 AlphaNumeric, remove spaces before putting into column
+IN CreditCard VARCHAR(19) -- remove all spaces, credit card either 16 or 19 digit long
+)
+	BEGIN
+		INSERT INTO Purchasers(PurchaserName, DoB, AddressHouseNumber, AddressStreet, AddressCity,AddressCounty,AddressPostcode, CreditCard)
+		VALUES(PurchaserName, DoB, AddressHouseNumber, AddressStreet, AddressCity,AddressCounty,AddressPostcode, CreditCard);
+	END; //
+
+/*
 Procedure to Browse all shows(events)
 Return All Events from EventInfo where search Query contained withing Title
 */
-
 DROP PROCEDURE IF EXISTS finalprojecttheatre.GetPerformanceInfo//
 CREATE PROCEDURE GetPerformanceInfo(IN PerfID INT)
 	BEGIN
