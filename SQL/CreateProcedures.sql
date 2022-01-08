@@ -1,5 +1,4 @@
 /*
-
 VERSION: SM_V2_6 : added search procedure, return performaceID based on DATETIME
 					added add purchaser to table procedure
 */
@@ -135,5 +134,17 @@ CREATE PROCEDURE GetPerformanceInfo(IN PerfID INT)
 		SELECT *
 		FROM Performances
         WHERE Performances.PerformanceID = PerfID; -- find all Shows containg the search query
+
+	END; //
+    
+/*
+Procedure to get all performances of a specific eventID
+*/
+DROP PROCEDURE IF EXISTS finalprojecttheatre.GetPerformances//
+CREATE PROCEDURE GetPerformances(IN EventID INT)
+	BEGIN
+		SELECT *
+		FROM Performances
+        WHERE Performances.EventID = EventID; -- find all Shows containg the search query
 
 	END; //
