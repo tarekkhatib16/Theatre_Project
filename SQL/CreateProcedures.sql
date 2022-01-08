@@ -1,6 +1,6 @@
 /*
 
-VERSION: SM_V2_4 : added Bool search show procedure
+VERSION: SM_V2_5 : added search procedure, return performaceID based on DATETIME
 */
 
 /*
@@ -13,7 +13,7 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS finalprojecttheatre.GetShows//
 CREATE PROCEDURE GetShows()
 	BEGIN
-		SELECT EventID, Title
+		SELECT EventID, Title, EventType, PerformerInfo, Descrip
 		FROM EventInfo;
 
 	END; //
@@ -26,7 +26,7 @@ Return All Events from EventInfo where search Query contained withing Title
 DROP PROCEDURE IF EXISTS finalprojecttheatre.GetShowsSearch//
 CREATE PROCEDURE GetShowsSearch(IN SearchQ VARCHAR(50))
 	BEGIN
-		SELECT EventID, Title
+		SELECT EventID, Title, EventType, PerformerInfo, Descrip
 		FROM EventInfo
         WHERE Title LIKE CONCAT('%',SearchQ,'%'); -- find all Shows containg the search query
 
@@ -62,7 +62,18 @@ CREATE PROCEDURE GetShowsDate(IN SearchQ DATE)
 
 	END; //
     
-    
+/*
+Procedure to return An EventID based on DateTime
+*/
+DROP PROCEDURE IF EXISTS finalprojecttheatre.GetPerformanceID_DT//
+CREATE PROCEDURE GetPerformanceID_DT(IN SearchQ DATETIME)
+    BEGIN
+		SELECT EventInfo.EventID
+		FROM EventInfo
+        WHERE PerformanceStart = SearchQ; -- Query must be in format YYYY-MM-DD STRING
+
+	END; //
+
 /*
 Procedure to add a new line to bookings table for ticket purchases
 Stalls BOOL True if seat in stalls, FALSE if seat in Circle (log price at time of purchase in case of refund/pricechange

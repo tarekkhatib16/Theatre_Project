@@ -1,6 +1,6 @@
 /*
 Stuart McClymont
-VERSION: SM_V2_2_1
+VERSION: SM_V2_2_2 : performance DateTime changed to UNIQUE
 */
 
 -- Create Database
@@ -26,7 +26,7 @@ CREATE TABLE EventInfo(
     LiveMusic BOOL NOT NULL, -- indicate if live music is present at event
     PerformerInfo VARCHAR(100), -- fill in details only if live music is present
     Descrip VARCHAR(500) NOT NULL, -- Description of Show
-    Lang VARCHAR(50) NOT NULL, -- Language of Performance
+    Lang VARCHAR(50), -- Language of Performance
     EventDurationMM INT NOT NULL, -- Length of Event in Minutes
     PricePenceStall INT NOT NULL, -- Could use DECIMAL(6,2) to list as £, using INT for easier conversion to Java for now
     PricePenceCircle INT NOT NULL, -- Could use DECIMAL(6,2) to list as £, using INT for easier conversion to Java for now
@@ -41,7 +41,7 @@ DROP TABLE IF EXISTS Performances;
 CREATE TABLE Performances(
 PerformanceID INT PRIMARY KEY AUTO_INCREMENT,
 EventID INT NOT NULL,
-PerformanceStart DATETIME NOT NULL, -- Format 'YYYY-MM-DD HH:MM:SS' AS STRING
+PerformanceStart DATETIME NOT NULL UNIQUE, -- Format 'YYYY-MM-DD HH:MM:SS' AS STRING
 AvailabilityOfTickets INT NOT NULL,
 PerformanceListed DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Auto Generated when Performance listed, for data analytics
 FOREIGN KEY(EventID) REFERENCES EventInfo(EventID)
@@ -54,7 +54,7 @@ DROP TABLE IF EXISTS Purchasers;
 CREATE TABLE Purchasers(
 PurchaserID INT PRIMARY KEY AUTO_INCREMENT,
 PurchaserName VARCHAR(100),
-DoB DATE, -- Format 'YYYY-MM-DD HH:MM:SS' AS STRING
+DoB DATE, -- Format 'YYYY-MM-DD' AS STRING
 AddressHouseNumber VARCHAR(50), -- VARCHAR(50) to cover instances where house has name, flat B, 21A etc
 AddressStreet VARCHAR(60), -- 
 AddressCity VARCHAR (60), -- To cover exceedingly long place names like Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch (58 Char)
