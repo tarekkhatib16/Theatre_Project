@@ -55,10 +55,10 @@ public class InputEngine {
 			String input = reader.getInput().toLowerCase();
 
 			if (input.contains("show all shows")) {
-				sql.browseAllShows();
+				System.out.println(sql.browseAllShows());
 				
-				System.out.println("if you would like to add tickets to a performance to your basket");
-				System.out.println("type in: 'add to basket' then type in the name of the performance");
+				System.out.println("if you would like to add tickets to this performance to your basket");
+				System.out.println("type in: add to basket");
 				System.out.println();
 				System.out.print("> ");
 				
@@ -73,19 +73,13 @@ public class InputEngine {
 			} else if (input.contains("quit")) {
 				finished = this.quit();
 			} else {
-				if (sql.searchName(input)) {
+				//if (sql.searchName(input)) {
 					sql.getName(input);
-					System.out.println("if you would like to add tickets to this performance to your basket");
-					System.out.println("type in: add to basket");
-					System.out.println();
-					System.out.print("> ");
-				} else {
-					System.out.println("There is no performance under that name, please ensure you typed");
-					System.out.println("the name of the performance correctly, or search for another show, or");
-					System.out.println("type in 'show all shows' to get a catalogue of all shows.");
-					System.out.println();
-					System.out.print("> ");
-				}
+				//} else {
+				//	System.out.println("There is no performance under that name, please ensure you typed");
+				//	System.out.println("the name of the performance correctly, or search for another show, or");
+				//	System.out.println("type in 'show all shows' to get a catalogue of all shows.");
+				//}
 			}
 		}
 	}
@@ -185,7 +179,7 @@ public class InputEngine {
 		System.out.println();
 		System.out.print("> ");
 		
-		String purchaserCreditCard = reader.getInput().replaceAll(" ", "");
+		int purchaserCreditCard = Integer.parseInt(reader.getInput());
 		
 		System.out.println("Please type in 'complete order' to complete purchase.");
 		System.out.println();
