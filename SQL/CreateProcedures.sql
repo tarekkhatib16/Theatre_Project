@@ -1,6 +1,7 @@
 /*
 
-VERSION: SM_V2_4 : added Bool search show procedure
+VERSION: SM_V2_6 : added search procedure, return performaceID based on DATETIME
+					added add purchaser to table procedure
 */
 
 /*
@@ -13,7 +14,7 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS finalprojecttheatre.GetShows//
 CREATE PROCEDURE GetShows()
 	BEGIN
-		SELECT EventID, Title
+		SELECT EventID, Title, EventType, PerformerInfo, Descrip
 		FROM EventInfo;
 
 	END; //
@@ -26,7 +27,7 @@ Return All Events from EventInfo where search Query contained withing Title
 DROP PROCEDURE IF EXISTS finalprojecttheatre.GetShowsSearch//
 CREATE PROCEDURE GetShowsSearch(IN SearchQ VARCHAR(50))
 	BEGIN
-		SELECT EventID, Title
+		SELECT EventID, Title, EventType, PerformerInfo, Descrip
 		FROM EventInfo
         WHERE Title LIKE CONCAT('%',SearchQ,'%'); -- find all Shows containg the search query
 
@@ -62,7 +63,18 @@ CREATE PROCEDURE GetShowsDate(IN SearchQ DATE)
 
 	END; //
     
-    
+/*
+Procedure to return An EventID based on DateTime
+*/
+DROP PROCEDURE IF EXISTS finalprojecttheatre.GetPerformanceID_DT//
+CREATE PROCEDURE GetPerformanceID_DT(IN SearchQ DATETIME)
+    BEGIN
+		SELECT EventInfo.EventID
+		FROM EventInfo
+        WHERE PerformanceStart = SearchQ; -- Query must be in format YYYY-MM-DD STRING
+
+	END; //
+
 /*
 Procedure to add a new line to bookings table for ticket purchases
 Stalls BOOL True if seat in stalls, FALSE if seat in Circle (log price at time of purchase in case of refund/pricechange
@@ -93,12 +105,30 @@ CREATE PROCEDURE SetBooking(IN PerfID INT, IN PurID INT, IN Conc BOOL, IN Stalls
         
         /*Return TRUE if Successful*/
 	END; //
-    
-    /*
+
+/*
+Procedure to add person to purchaser table
+*/
+DROP PROCEDURE IF EXISTS finalprojecttheatre.InsertPurchaser//
+CREATE PROCEDURE InsertPurchaser(
+IN PurchaserName VARCHAR(100),
+IN DoB DATE, -- Format 'YYYY-MM-DD' AS STRING
+IN AddressHouseNumber VARCHAR(50), -- VARCHAR(50) to cover instances where house has name, flat B, 21A etc
+IN AddressStreet VARCHAR(60), -- 
+IN AddressCity VARCHAR (60), -- 
+IN AddressCounty VARCHAR(60), --
+IN AddressPostcode VARCHAR(7), -- Postcodes between 5 and 7 AlphaNumeric, remove spaces before putting into column
+IN CreditCard VARCHAR(19) -- remove all spaces, credit card either 16 or 19 digit long
+)
+	BEGIN
+		INSERT INTO Purchasers(PurchaserName, DoB, AddressHouseNumber, AddressStreet, AddressCity,AddressCounty,AddressPostcode, CreditCard)
+		VALUES(PurchaserName, DoB, AddressHouseNumber, AddressStreet, AddressCity,AddressCounty,AddressPostcode, CreditCard);
+	END; //
+
+/*
 Procedure to Browse all shows(events)
 Return All Events from EventInfo where search Query contained withing Title
 */
-
 DROP PROCEDURE IF EXISTS finalprojecttheatre.GetPerformanceInfo//
 CREATE PROCEDURE GetPerformanceInfo(IN PerfID INT)
 	BEGIN
