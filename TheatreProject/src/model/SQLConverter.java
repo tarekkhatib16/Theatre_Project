@@ -3,15 +3,12 @@ package model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.CallableStatement;
-import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.List;
 
 import util.DBConnector;
 
 public class SQLConverter {
 
-	private Boolean finished = false;
 	DBConnector db = new DBConnector();
 	String mySQLquery; // string to hold query
 	ResultSet rs; // results set
@@ -145,7 +142,7 @@ public class SQLConverter {
 			int creditCard) {
 		db.connect(); // open connection
 		
-		mySQLquery = "CALL AddToPurchaser('" 
+		mySQLquery = "CALL InsertPurchaser('" 
 						+ name + "','" 
 						+ DOB + "','"
 						+ addressHouseNumber + "','"
@@ -170,11 +167,23 @@ public class SQLConverter {
 		printResults();
 		
 	}
-
+	
 	public String getPerformanceInformation(int perfID) {
 		db.connect(); // open connection
 		
 		String query = "Call GetPerformanceInfo("+ String.valueOf(perfID) + ")";
+		
+		rs = db.runQuery(query);
+		String retVal = resultToString(db.compileResults(rs));
+		db.close();		
+		
+		return retVal;
+	}
+	
+	public String getPerformances(int eventID) {
+		db.connect(); // open connection
+		
+		String query = "Call GetPerformances("+ String.valueOf(eventID) + ")";
 		
 		rs = db.runQuery(query);
 		String retVal = resultToString(db.compileResults(rs));

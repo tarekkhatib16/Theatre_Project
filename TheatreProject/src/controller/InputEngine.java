@@ -1,11 +1,7 @@
 package controller;
 
-import util.DBConnector;
 import util.InputReader;
 import model.Transaction;
-
-import java.sql.ResultSet;
-import java.util.HashMap;
 
 import model.SQLConverter;
 
@@ -63,7 +59,7 @@ public class InputEngine {
 				System.out.print("> ");
 				
 			} else if (input.contains("add to basket")) {
-				this.addTickets();
+				this.selectEvent();
 			} else if (input.contains("see basket")) {
 				this.getBasket();
 			} else if (input.contains("checkout")) {
@@ -73,13 +69,7 @@ public class InputEngine {
 			} else if (input.contains("quit")) {
 				finished = this.quit();
 			} else {
-				//if (sql.searchName(input)) {
-					sql.getName(input);
-				//} else {
-				//	System.out.println("There is no performance under that name, please ensure you typed");
-				//	System.out.println("the name of the performance correctly, or search for another show, or");
-				//	System.out.println("type in 'show all shows' to get a catalogue of all shows.");
-				//}
+				this.allShows(input);
 			}
 		}
 	}
@@ -99,20 +89,63 @@ public class InputEngine {
 		System.out.println();
 		System.out.print("> ");
 	}
+	
+	/*
+	 * Method to show all available shows.
+	 */
+	public void allShows(String input) {
+		String output = sql.getName(input);
+		System.out.println(output);
+	}
+	
+	/*
+	 * Method to select specific event
+	 */
+	public void selectEvent() {
+		System.out.println("type in the event ID of the performance you would");
+		System.out.println("like to attend");
+		System.out.println();
+		System.out.print("> ");
+		
+		int eventID = Integer.parseInt(reader.getInput());
+		
+		String performances = sql.getPerformances(eventID);
+		
+		System.out.println(performances);
+		
+		addTickets();
+	}
 
 	/*
 	 * Method to add tickets to the transaction basket.
 	 */
 	public void addTickets() {
-		System.out.println("type in the date (dd/mm/yyyy) of the performance you would");
-		System.out.println("like to attend");
+		
+		System.out.println("Please type in the year of the event ");
+		System.out.println("you'd like to attent (yyyy).");
 		System.out.println();
 		System.out.print("> ");
 		
-		String date = reader.getInput();
+		String year = reader.getInput();
 		
-		System.out.println("type in the time (hh:mm) of the performance you would like");
-		System.out.println("to attend");
+		System.out.println("Please type in the month of the event ");
+		System.out.println("you'd like to attent (mm).");
+		System.out.println();
+		System.out.print("> ");
+		
+		String month = reader.getInput();
+		
+		System.out.println("Please type in the date of the event ");
+		System.out.println("you'd like to attent (dd).");
+		System.out.println();
+		System.out.print("> ");
+		
+		String day = reader.getInput();
+		
+		String date = year + "-" + month + "-" + day;
+		
+		System.out.println("Please type in the time of the event ");
+		System.out.println("you'd like to attent (hh:mm).");
 		System.out.println();
 		System.out.print("> ");
 		
