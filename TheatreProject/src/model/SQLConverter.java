@@ -81,6 +81,36 @@ public class SQLConverter {
 		
 		return retVal;
 	}
+	
+	/*
+	 * Method to get performance information using performance ID
+	 */
+	public String getPerformance(int PerfID) {
+		db.connect();
+		
+		mySQLquery = "CALL GetPerfInfo("+String.valueOf(PerfID)+")";
+		rs = db.runQuery(mySQLquery);
+		
+		String retVal = resultToString(db.compileResults(rs));
+		db.close();
+		
+		return retVal;
+	}
+	
+	/*
+	 * Method to get Event Name information using performance ID
+	 */
+	public String getEventFromPerformance(int PerfID) {
+		db.connect();
+		
+		mySQLquery = "CALL GetEventIDFromPerf("+String.valueOf(PerfID)+")";
+		rs = db.runQuery(mySQLquery);
+		
+		String retVal = resultToString(db.compileResults(rs));
+		db.close();
+		
+		return retVal;
+	}
 
 	/*
 	 * Search for a specific performance by UNIQUE identifier of Date/time
