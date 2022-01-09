@@ -371,19 +371,19 @@ public class InputEngine {
 		// order.addTickets(performanceID, seatNumber, 1);
 		System.out.println("-----------------");
 		for (int i = 0; i < order.getTickets().size(); i++) {
-			System.out.print("Performance:");
+			System.out.print("Performance: ");
 			String even = sql.getEventFromPerformance(order.getTickets().get(i).get(0));
 			String perf = sql.getPerformance(order.getTickets().get(i).get(0));
 			System.out.print(even);
 			System.out.print(perf);
 			System.out.println();
 			
-			System.out.print("Seat Number:");			
+			System.out.print("Seat Number: ");			
 			int seat = order.getTickets().get(i).get(1);
 			System.out.print(seat);
 			System.out.println();
 			
-			System.out.print("Concessionary?");
+			System.out.print("Concessionary? ");
 			int conc = order.getTickets().get(i).get(2);
 			
 			if (conc == 1) {
