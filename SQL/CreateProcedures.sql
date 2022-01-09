@@ -116,14 +116,13 @@ IN AddressStreet VARCHAR(60), --
 IN AddressCity VARCHAR (60), -- 
 IN AddressCounty VARCHAR(60), --
 IN AddressPostcode VARCHAR(7), -- Postcodes between 5 and 7 AlphaNumeric, remove spaces before putting into column
-IN CreditCard VARCHAR(19), -- remove all spaces, credit card either 16 or 19 digit long
-OUT PurID INT
+IN CreditCard VARCHAR(19) -- remove all spaces, credit card either 16 or 19 digit long
 )
 	BEGIN
 		INSERT INTO Purchasers(PurchaserName, DoB, AddressHouseNumber, AddressStreet, AddressCity,AddressCounty,AddressPostcode, CreditCard)
 		VALUES(PurchaserName, DoB, AddressHouseNumber, AddressStreet, AddressCity,AddressCounty,AddressPostcode, CreditCard);
         
-        SET PurID = (SELECT LAST_INSERT_ID() FROM Purchasers);
+        SELECT LAST_INSERT_ID() FROM Purchasers LIMIT 1;
 	END; //
 
 /*
