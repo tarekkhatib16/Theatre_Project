@@ -79,7 +79,7 @@ Procedure to add a new line to bookings table for ticket purchases
 Stalls BOOL True if seat in stalls, FALSE if seat in Circle (log price at time of purchase in case of refund/pricechange
 */
 DROP PROCEDURE IF EXISTS finalprojecttheatre.SetBooking//
-CREATE PROCEDURE SetBooking(IN PerfID INT, IN PurID INT, IN Conc BOOL, IN Stalls BOOL, OUT RetValue BOOL)
+CREATE PROCEDURE SetBooking(IN PerfID INT, IN PurID INT, IN Conc BOOL, IN Stalls BOOL, IN SeatNumber INT)
 	BEGIN
 		/*Subtract a seat from available seats*/ -- *? Check table that seats are available
 		UPDATE Performances
@@ -99,10 +99,9 @@ CREATE PROCEDURE SetBooking(IN PerfID INT, IN PurID INT, IN Conc BOOL, IN Stalls
                     WHERE Performances.PerformanceID = PerfID)));
         
         /*Add the values to bookings table*/
-		INSERT INTO Bookings(PerformanceID, PurchaserID, Concessionary,TicketPricePence)
-        VALUES(PerfID, PurID, Conc, @Price);
-        
-        /*Return TRUE if Successful*/
+		INSERT INTO Bookings(PerformanceID, PurchaserID, Concessionary, SeatNumber, TicketPricePence)
+        VALUES(PerfID, PurID, Conc, SeatNumber, @Price);
+
 	END; //
 
 /*
@@ -117,11 +116,14 @@ IN AddressStreet VARCHAR(60), --
 IN AddressCity VARCHAR (60), -- 
 IN AddressCounty VARCHAR(60), --
 IN AddressPostcode VARCHAR(7), -- Postcodes between 5 and 7 AlphaNumeric, remove spaces before putting into column
-IN CreditCard VARCHAR(19) -- remove all spaces, credit card either 16 or 19 digit long
+IN CreditCard VARCHAR(19), -- remove all spaces, credit card either 16 or 19 digit long
+OUT PurID INT
 )
 	BEGIN
 		INSERT INTO Purchasers(PurchaserName, DoB, AddressHouseNumber, AddressStreet, AddressCity,AddressCounty,AddressPostcode, CreditCard)
 		VALUES(PurchaserName, DoB, AddressHouseNumber, AddressStreet, AddressCity,AddressCounty,AddressPostcode, CreditCard);
+        
+        SET PurID = (SELECT LAST_INSERT_ID() FROM Purchasers);
 	END; //
 
 /*
@@ -133,7 +135,6 @@ CREATE PROCEDURE GetEventInfo(IN EvtID INT)
 		SELECT EventID, Title, EventType, PerformerInfo, Descrip, Lang, CONCAT(EventDurationMM,'mins'), CONCAT('Stall: £', ROUND(PricePenceStall/100,2)), CONCAT('Circle: £', ROUND(PricePenceCircle/100, 2))
 		FROM EventInfo
         WHERE EventInfo.EventID = EvtID; -- find all Shows containg the search query
-
 	END; //
     
 /*
