@@ -105,7 +105,7 @@ public class SQLConverter {
 	public String searchPerformanceByDate(String date) {
 		db.connect(); // open connection
 		
-		mySQLquery = " CALL GetShowsDate('" + date + "')"; // Date must be in YYYY-MM-DD with hyphens
+		mySQLquery = "CALL GetShowsDate('" + date + "')"; // Date must be in YYYY-MM-DD with hyphens
 	
 		rs = db.runQuery(mySQLquery);
 		String retVal = resultToString(db.compileResults(rs));
@@ -150,7 +150,7 @@ public class SQLConverter {
 						+ addressCity + "','"
 						+ addressCounty + "','"
 						+ addressPostcode + "','"
-						+ creditCard + "')";
+						+ creditCard + ", @retBool')";
 		db.runQuery(mySQLquery);
 		db.close(); //close connection
 	}
@@ -168,10 +168,10 @@ public class SQLConverter {
 		
 	}
 	
-	public String getPerformanceInformation(int perfID) {
+	public String GetEventInfo(int evtID) {
 		db.connect(); // open connection
 		
-		String query = "Call GetPerformanceInfo("+ String.valueOf(perfID) + ")";
+		String query = "Call GetEventInfo("+ String.valueOf(evtID) + ")";
 		
 		rs = db.runQuery(query);
 		String retVal = resultToString(db.compileResults(rs));
@@ -196,11 +196,10 @@ public class SQLConverter {
 	 * Method to get the next available seat number for a specific performance ID.
 	 */
 	public int getNextSeat() {
-		db.connect(); // open connection
-		
-		db.runQuery("");
-		
-		db.close(); //close connection
+		//for future development
+		//db.connect(); // open connection
+		//db.runQuery("");
+		//db.close(); //close connection
 		
 		return 1;
 	}
@@ -226,7 +225,9 @@ public class SQLConverter {
 		
 		for (int i = 1; i < Data.size(); i++) { // ignore headers, start at index 1
 			for (int j = 0; j < Data.get(i).size(); j++) {
-				retVal += Data.get(i).get(j) + " ";
+				if (Data.get(i).get(j) != null) {
+					retVal += Data.get(i).get(j) + " ";
+				}
 			}
 			retVal+="\n"; //newline
 		}

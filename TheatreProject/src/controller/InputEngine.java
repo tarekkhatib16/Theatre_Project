@@ -32,6 +32,7 @@ public class InputEngine {
 		reader = new InputReader();
 		order = new Transaction();
 		sql = new SQLConverter();
+		
 	}
 	
 	/*
@@ -45,20 +46,42 @@ public class InputEngine {
 
 		boolean finished = false;
 
-		printWelcome();
+		//printWelcome();
 		
 		while (!finished) {
+			printWelcome();
 			String input = reader.getInput().toLowerCase();
 
 			if (input.contains("show all shows")) {
 				System.out.println(sql.browseAllShows());
+				selectEventOrBack();
+			}
+			else if (input.contains("search name")){
+				System.out.println("Enter Name or part of name of show");
+				System.out.println();
+				System.out.print("> ");
 				
-				System.out.println("if you would like to add tickets to this performance to your basket");
+				searchShowsName();
+			}
+			else if (input.contains("search date")){
+				System.out.println("Enter Date or part of Date of show, in format YYYY-MM-DD");
+				System.out.println();
+				System.out.print("> ");
+				
+				searchShowsDate();
+			}
+			else if (input.equals("quit")){
+				finished = this.quit();
+			}
+				/*System.out.println("if you would like to add tickets to this performance to your basket");
 				System.out.println("type in: add to basket");
 				System.out.println();
 				System.out.print("> ");
 				
-			} else if (input.contains("add to basket")) {
+			}  else if (input.contains("test")) {//TEST
+				System.out.println(sql.GetEventInfo(1));
+				System.out.println(sql.getPerformances(1));
+			}else if (input.contains("add to basket")) {
 				this.selectEvent();
 			} else if (input.contains("see basket")) {
 				this.getBasket();
@@ -70,7 +93,7 @@ public class InputEngine {
 				finished = this.quit();
 			} else {
 				this.allShows(input);
-			}
+			}*/
 		}
 	}
 	
@@ -82,20 +105,60 @@ public class InputEngine {
 		System.out.println("If you would like to see the full catalogue of shows available");
 		System.out.println("type: 'show all shows'");
 		System.out.println("Alternatively, you are able to search for a specific performance");
-		System.out.println("by typing in the name of the show");
+		System.out.println("by typing 'search name' or 'search date'"); // added
+		/*System.out.println("by typing in the name of the show");
 		System.out.println("If you would like to check an existing order, type in your");
-		System.out.println("booking reference.");
+		System.out.println("booking reference.");*/
 		System.out.println("Finally, if you would like to quit the application type in 'quit'.");
 		System.out.println();
 		System.out.print("> ");
 	}
 	
 	/*
-	 * Method to show all available shows.
+	 * Method to show all available shows based on search term.
 	 */
-	public void allShows(String input) {
+	//public void allShows(String input) {
+	public void searchShowsName() {
+		String input = reader.getInput();
 		String output = sql.getName(input);
 		System.out.println(output);
+		selectEventOrBack();
+	}
+	
+	/*
+	 * Method to show all shows based on search term Date
+	 */
+	public void searchShowsDate() {
+		String input = reader.getInput();
+		String output = sql.searchPerformanceByDate(input);
+		System.out.println(output);
+		selectEventOrBack();
+	}
+	
+	/*
+	 * method to either select event from list or return to main
+	 */
+	private void selectEventOrBack() {
+		boolean retToMain = false;
+		System.out.println("type 'more info' to see more info about an event");
+		System.out.println("or 'back' to return to main menu");
+		System.out.println();
+		System.out.print("> ");
+		
+		while(!retToMain) {
+			String input = reader.getInput().toLowerCase();
+			
+			if (input.contains("more info")) {
+				retToMain = true; // reset to break out of loop on return from selectEvent
+				selectEvent();
+			}
+			else if (input.contains("back")) {
+				retToMain = true;
+			}
+			else{
+				System.out.println("try again");
+			}
+		}
 	}
 	
 	/*
@@ -109,18 +172,42 @@ public class InputEngine {
 		
 		int eventID = Integer.parseInt(reader.getInput());
 		
-		String performances = sql.getPerformances(eventID);
+		//String performances = sql.getPerformances(eventID);
+		System.out.println(sql.GetEventInfo(eventID)); // print event info
+		System.out.println(sql.getPerformances(eventID)); // print event performances
 		
-		System.out.println(performances);
+		boolean retToMain = false;
 		
-		addTickets();
+		while (!retToMain) {
+			System.out.println("if you would like to purchase tickets for a performance listed");
+			System.out.println("type 'add tickets'");
+			System.out.println("otherwise type 'back' to return to main menu");
+			System.out.println();
+			System.out.print("> ");
+			
+			String input = reader.getInput().toLowerCase();
+			
+			if (input.contains("add tickets")) {
+				retToMain = true; //reset to break out of loop on return from addTickets
+				addTickets();
+			}
+			else if (input.contains("back")) {
+				retToMain = true;
+			}
+			else{
+				System.out.println("try again");
+			}
+			
+			
+		}
+		
 	}
 
 	/*
 	 * Method to add tickets to the transaction basket.
 	 */
 	public void addTickets() {
-		
+		/*
 		System.out.println("Please type in the year of the event ");
 		System.out.println("you'd like to attent (yyyy).");
 		System.out.println();
@@ -150,6 +237,12 @@ public class InputEngine {
 		System.out.print("> ");
 		
 		String time = reader.getInput();
+		*/
+		System.out.println("Enter performanceID of performance you want to book");
+		System.out.println();
+		System.out.print("> ");
+		
+		int performanceID = Integer.parseInt(reader.getInput());
 		
 		System.out.println("How many tickets would you like to buy?");
 		System.out.println();
@@ -163,11 +256,12 @@ public class InputEngine {
 		
 		int concessionary = Integer.parseInt(reader.getInput());
 		
-		int performanceID = sql.searchPerformance(date, time);
+		// int performanceID = sql.searchPerformance(date, time);
 		
 		int seatNumber = sql.getNextSeat();
 		
-		for (int i = 0; i < (numberOfTickets-concessionary); i++) {
+		//for (int i = 0; i < (numberOfTickets-concessionary); i++) {
+		for (int i = 0; i < numberOfTickets; i++) {
 			if (concessionary > 0) {
 				order.addTickets(i, performanceID, seatNumber, 1);
 				concessionary--;
@@ -178,11 +272,38 @@ public class InputEngine {
 			}
 		}
 		
-		System.out.println("Tickets were added to your basket. If you would like to see what");
+		/*System.out.println("Tickets were added to your basket. If you would like to see what");
 		System.out.println("is in your basket type: 'see basket'. Alternatively if you would");
 		System.out.println("like to checkout type: 'checkout'.");
 		System.out.println();
-		System.out.print("> ");
+		System.out.print("> ");*/
+	}
+	
+	/*
+	 * method to loop, buy more tickets, check basket or checkout
+	 */
+	private void loopPurchase() {
+		boolean retToMain = false;
+		while (!retToMain) {
+			System.out.println("Tickets were added to your basket. If you would like to see what");
+			System.out.println("is in your basket type: 'see basket'. Alternatively if you would");
+			System.out.println("like to checkout type: 'checkout'.");
+			System.out.println("Or if you would like to search for more shows, type 'back'");
+			System.out.println();
+			System.out.print("> ");
+			
+			String input = reader.getInput().toLowerCase();
+			
+			if (input.contains("see basket")) {
+				retToMain = true; //reset to break out of loop on return
+				this.getBasket();
+			} else if (input.contains("checkout")) {
+				retToMain = true; //reset to break out of loop on return
+				this.finaliseOrder();
+			} else if (input.contains("back")) {
+				retToMain = true;
+			}
+		}
 	}
 
 	/*
@@ -287,7 +408,7 @@ public class InputEngine {
 	 */
 	public void getBasket() {
 		System.out.println("Your basket contains the following tickets:");
-		System.out.println(sql.getPerformanceInformation(0));
+		//System.out.println(sql.getPerformanceInformation(0));
 	}
 	
 	/*

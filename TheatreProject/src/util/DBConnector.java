@@ -4,6 +4,7 @@
 
 package util;
 import java.sql.Connection;
+import java.sql.CallableStatement;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,7 +33,7 @@ public class DBConnector {
 		}
 
 		if (conn != null) {
-			
+			//System.out.println("Connection established.");
 		} else {
 			System.out.println("Connection null still.");
 		}
@@ -140,6 +141,7 @@ public class DBConnector {
 	public void close() {
 		try {
 			conn.close();
+			//System.out.println("Connection closed.");
 		} catch (SQLException e) {
 			System.out.println("Connection not closed.");
 			e.printStackTrace();
