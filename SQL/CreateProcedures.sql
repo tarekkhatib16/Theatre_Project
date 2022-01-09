@@ -26,9 +26,11 @@ Return All Events from EventInfo where search Query contained withing Title
 DROP PROCEDURE IF EXISTS finalprojecttheatre.GetShowsSearch//
 CREATE PROCEDURE GetShowsSearch(IN SearchQ VARCHAR(50))
 	BEGIN
-		SELECT EventID, Title, EventType, PerformerInfo, Descrip
+		SELECT EventInfo.EventID, EventInfo.Title, EventInfo.EventType, Performances.PerformanceStart
 		FROM EventInfo
-        WHERE Title LIKE CONCAT('%',SearchQ,'%'); -- find all Shows containg the search query
+        LEFT JOIN Performances
+        ON EventInfo.EventID = Performances.EventID
+        WHERE EventInfo.Title LIKE CONCAT('%',SearchQ,'%'); -- find all Shows containg the search query
 
 	END; //
 
@@ -54,23 +56,23 @@ Return All Events from EventInfo where search Query matches date
 DROP PROCEDURE IF EXISTS finalprojecttheatre.GetShowsDate//
 CREATE PROCEDURE GetShowsDate(IN SearchQ VARCHAR(10))
 	BEGIN
-		SELECT EventInfo.EventID, EventInfo.Title, Performances.PerformanceStart
+		SELECT EventInfo.EventID, EventInfo.Title, EventInfo.EventType, Performances.PerformanceStart
 		FROM EventInfo
         LEFT JOIN Performances
         ON EventInfo.EventID = Performances.EventID
-        WHERE Performances.PerformanceStart LIKE CONCAT('%',SearchQ,'%'); -- Query must be in format YYYY-MM-DD STRING
+        WHERE PerformanceStart LIKE CONCAT('%',SearchQ,'%'); -- Query must be in format YYYY-MM-DD STRING
 
 	END; //
     
 /*
-Procedure to return An PerformanceID based on DateTime
+Procedure to return An EventID based on DateTime
 */
 DROP PROCEDURE IF EXISTS finalprojecttheatre.GetPerformanceID_DT//
 CREATE PROCEDURE GetPerformanceID_DT(IN SearchQ DATETIME)
     BEGIN
-		SELECT Performances.PerformanceID
-		FROM Performances
-        WHERE Performances.PerformanceStart = SearchQ; -- Query must be in format YYYY-MM-DD HH:MM:SS STRING
+		SELECT EventInfo.EventID
+		FROM EventInfo
+        WHERE PerformanceStart = SearchQ; -- Query must be in format YYYY-MM-DD STRING
 
 	END; //
 
@@ -99,9 +101,9 @@ CREATE PROCEDURE SetBooking(IN PerfID INT, IN PurID INT, IN Conc BOOL, IN Stalls
                     WHERE Performances.PerformanceID = PerfID)));
         
         /*Add the values to bookings table*/
-		INSERT INTO Bookings(PerformanceID, PurchaserID, Concessionary, SeatNumber, TicketPricePence)
-        VALUES(PerfID, PurID, Conc, SeatNumber, @Price);
-
+		INSERT INTO Bookings(PerformanceID, PurchaserID, Concessionary,SeatNumber,TicketPricePence)
+        VALUES(PerfID, PurID, Conc,SeatNumber, @Price);
+        
 	END; //
 
 /*
@@ -121,19 +123,21 @@ IN CreditCard VARCHAR(19) -- remove all spaces, credit card either 16 or 19 digi
 	BEGIN
 		INSERT INTO Purchasers(PurchaserName, DoB, AddressHouseNumber, AddressStreet, AddressCity,AddressCounty,AddressPostcode, CreditCard)
 		VALUES(PurchaserName, DoB, AddressHouseNumber, AddressStreet, AddressCity,AddressCounty,AddressPostcode, CreditCard);
-        
-        SELECT LAST_INSERT_ID() FROM Purchasers LIMIT 1;
-	END; //
-
+	
+		SELECT LAST_INSERT_ID() FROM Purchasers LIMIT 1;
+    END; //
+	
 /*
-Procedure to return info on specific event
+Procedure to Browse all shows(events)
+Return All Events from EventInfo where search Query contained withing Title
 */
-DROP PROCEDURE IF EXISTS finalprojecttheatre.GetEventInfo//
-CREATE PROCEDURE GetEventInfo(IN EvtID INT)
+DROP PROCEDURE IF EXISTS finalprojecttheatre.GetPerformanceInfo//
+CREATE PROCEDURE GetPerformanceInfo(IN PerfID INT)
 	BEGIN
-		SELECT EventID, Title, EventType, PerformerInfo, Descrip, Lang, CONCAT(EventDurationMM,'mins'), CONCAT('Stall: £', ROUND(PricePenceStall/100,2)), CONCAT('Circle: £', ROUND(PricePenceCircle/100, 2))
-		FROM EventInfo
-        WHERE EventInfo.EventID = EvtID; -- find all Shows containg the search query
+		SELECT *
+		FROM Performances
+        WHERE Performances.PerformanceID = PerfID; -- find all Shows containg the search query
+
 	END; //
     
 /*
@@ -160,13 +164,27 @@ CREATE PROCEDURE GetEventIDFromPerf(IN PerfID INT)
 	END; //
     
 /*
+Procedure to return info on specific event
+*/
+DROP PROCEDURE IF EXISTS finalprojecttheatre.GetEventInfo//
+CREATE PROCEDURE GetEventInfo(IN EvtID INT)
+	BEGIN
+		SELECT EventID, Title, EventType, PerformerInfo, Descrip, Lang, CONCAT(EventDurationMM,'mins'), CONCAT('Stall: £', ROUND(PricePenceStall/100,2)), CONCAT('Circle: £', ROUND(PricePenceCircle/100, 2))
+		FROM EventInfo
+        WHERE EventInfo.EventID = EvtID; -- find all Shows containg the search query
+
+	END; //
+
+/*
 Procedure to get all performances of a specific eventID
 */
 DROP PROCEDURE IF EXISTS finalprojecttheatre.GetPerformances//
 CREATE PROCEDURE GetPerformances(IN EventID INT)
 	BEGIN
-		SELECT PerformanceID, PerformanceStart, AvailabilityOfTickets
+		SELECT *
 		FROM Performances
         WHERE Performances.EventID = EventID; -- find all Shows containg the search query
 
 	END; //
+    
+DELIMITER ;

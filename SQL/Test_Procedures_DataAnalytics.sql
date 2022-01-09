@@ -14,5 +14,5 @@ Test Data Analytics Procedures
 --
 --
 
---
-CALL DA_DemographicAgeAllBooking();
+-- Test Procedure to show Bookings demographics, amount of bookings into age, all bookings
+-- CALL DA_DemographicAgeAllBooking();

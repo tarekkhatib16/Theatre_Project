@@ -35,6 +35,7 @@ CREATE TABLE EventInfo(
 );
 
 /* -- Create Performaces Table
+
 */
 DROP TABLE IF EXISTS Performances;
 CREATE TABLE Performances(
@@ -47,6 +48,7 @@ FOREIGN KEY(EventID) REFERENCES EventInfo(EventID)
 );
 
 /* -- Create Table Purchasers
+
 */
 DROP TABLE IF EXISTS Purchasers;
 CREATE TABLE Purchasers(
@@ -62,6 +64,7 @@ CreditCard VARCHAR(19) -- Credit card numbers between 16-19 digits long, remove 
 );
 
 /* -- Create Bookings Table
+
 */
 DROP TABLE IF EXISTS Bookings;
 CREATE TABLE Bookings(
