@@ -35,7 +35,6 @@ CREATE TABLE EventInfo(
 );
 
 /* -- Create Performaces Table
-
 */
 DROP TABLE IF EXISTS Performances;
 CREATE TABLE Performances(
@@ -48,7 +47,6 @@ FOREIGN KEY(EventID) REFERENCES EventInfo(EventID)
 );
 
 /* -- Create Table Purchasers
-
 */
 DROP TABLE IF EXISTS Purchasers;
 CREATE TABLE Purchasers(
@@ -64,7 +62,6 @@ CreditCard VARCHAR(19) -- Credit card numbers between 16-19 digits long, remove 
 );
 
 /* -- Create Bookings Table
-
 */
 DROP TABLE IF EXISTS Bookings;
 CREATE TABLE Bookings(
@@ -72,6 +69,7 @@ BookingID INT PRIMARY KEY AUTO_INCREMENT,
 PerformanceID INT NOT NULL,
 PurchaserID INT NOT NULL,
 Concessionary BOOLEAN NOT NULL, 
+SeatNumber INT NOT NULL,
 TicketPricePence INT NOT NULL, -- Log price of ticket, in pence, in case ticket price changes after purchase
 BookingTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Automatically add current date time to booking for easier lookups and legal
 FOREIGN KEY(PerformanceID) REFERENCES Performances(PerformanceID),
