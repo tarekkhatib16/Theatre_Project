@@ -180,10 +180,11 @@ public class SQLConverter {
 						+ addressCity + "','"
 						+ addressCounty + "','"
 						+ addressPostcode + "','"
-						+ creditCard + "', @retBool)";
+						+ creditCard + "')";
 		rs = db.runQuery(mySQLquery);
-		
 		String retVal = resultToString(db.compileResults(rs));
+		
+		System.out.print(retVal);
 		
 		db.close(); //close connection
 		
