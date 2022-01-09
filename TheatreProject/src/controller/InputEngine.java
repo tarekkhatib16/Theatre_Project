@@ -45,11 +45,10 @@ public class InputEngine {
 	private void start() {
 
 		boolean finished = false;
-
-		//printWelcome();
+		
+		printWelcome();
 		
 		while (!finished) {
-			printWelcome();
 			String input = reader.getInput().toLowerCase();
 
 			if (input.contains("show all shows")) {
@@ -70,30 +69,15 @@ public class InputEngine {
 				
 				searchShowsDate();
 			}
+			else if (input.contains("see order")) {
+				this.getOrder();
+			}
 			else if (input.equals("quit")){
 				finished = this.quit();
 			}
-				/*System.out.println("if you would like to add tickets to this performance to your basket");
-				System.out.println("type in: add to basket");
-				System.out.println();
-				System.out.print("> ");
-				
-			}  else if (input.contains("test")) {//TEST
-				System.out.println(sql.GetEventInfo(1));
-				System.out.println(sql.getPerformances(1));
-			}else if (input.contains("add to basket")) {
-				this.selectEvent();
-			} else if (input.contains("see basket")) {
-				this.getBasket();
-			} else if (input.contains("checkout")) {
-				this.finaliseOrder();
-			} else if (input.contains("see order")) {
-				this.getOrder();
-			} else if (input.contains("quit")) {
-				finished = this.quit();
-			} else {
-				this.allShows(input);
-			}*/
+			else {
+				System.out.println("command not valid, enter again");
+			}
 		}
 	}
 	
@@ -108,14 +92,14 @@ public class InputEngine {
 		System.out.println("'show all shows' to browse all available shows");
 		System.out.println();
 		System.out.println("Alternatively, you are able to search for a specific performance");
-		System.out.println("by typing:"); // added
+		System.out.println("by typing:"); 
 		System.out.println();
 		System.out.println("'search name' to search by name");
 		System.out.println("'search date' to search by date");
 		System.out.println();
-		/*System.out.println("by typing in the name of the show");
 		System.out.println("If you would like to check an existing order, type in your");
-		System.out.println("booking reference.");*/
+		System.out.println("booking reference.");
+		System.out.println();
 		System.out.println("Finally, if you would like to quit the application type in 'quit'.");
 		System.out.println();
 		System.out.print("> ");
@@ -178,9 +162,12 @@ public class InputEngine {
 		System.out.print("> ");
 		
 		int eventID = Integer.parseInt(reader.getInput());
-		
-		//String performances = sql.getPerformances(eventID);
+
+		System.out.println("Event Selected");
+		System.out.println();
 		System.out.println(sql.GetEventInfo(eventID)); // print event info
+		System.out.println("Available Performances");
+		System.out.println();
 		System.out.println(sql.getPerformances(eventID)); // print event performances
 		
 		boolean retToMain = false;
@@ -214,37 +201,7 @@ public class InputEngine {
 	 * Method to add tickets to the transaction basket.
 	 */
 	public void addTickets() {
-		/*
-		System.out.println("Please type in the year of the event ");
-		System.out.println("you'd like to attent (yyyy).");
-		System.out.println();
-		System.out.print("> ");
 		
-		String year = reader.getInput();
-		
-		System.out.println("Please type in the month of the event ");
-		System.out.println("you'd like to attent (mm).");
-		System.out.println();
-		System.out.print("> ");
-		
-		String month = reader.getInput();
-		
-		System.out.println("Please type in the date of the event ");
-		System.out.println("you'd like to attent (dd).");
-		System.out.println();
-		System.out.print("> ");
-		
-		String day = reader.getInput();
-		
-		String date = year + "-" + month + "-" + day;
-		
-		System.out.println("Please type in the time of the event ");
-		System.out.println("you'd like to attent (hh:mm).");
-		System.out.println();
-		System.out.print("> ");
-		
-		String time = reader.getInput();
-		*/
 		System.out.println("Enter performanceID of performance you want to book");
 		System.out.println();
 		System.out.print("> ");
@@ -263,27 +220,20 @@ public class InputEngine {
 		
 		int concessionary = Integer.parseInt(reader.getInput());
 		
-		// int performanceID = sql.searchPerformance(date, time);
-		
 		int seatNumber = sql.getNextSeat();
 		
-		//for (int i = 0; i < (numberOfTickets-concessionary); i++) {
 		for (int i = 0; i < numberOfTickets; i++) {
 			if (concessionary > 0) {
-				order.addTickets(i, performanceID, seatNumber, 1);
+				order.addTickets(performanceID, seatNumber, 1);
 				concessionary--;
 				seatNumber++;
 			} else {
-				order.addTickets(i, performanceID, seatNumber, 0);
+				order.addTickets(performanceID, seatNumber, 0);
 				seatNumber++;
 			}
 		}
 		
-		/*System.out.println("Tickets were added to your basket. If you would like to see what");
-		System.out.println("is in your basket type: 'see basket'. Alternatively if you would");
-		System.out.println("like to checkout type: 'checkout'.");
-		System.out.println();
-		System.out.print("> ");*/
+		this.loopPurchase();
 	}
 	
 	/*
@@ -295,7 +245,7 @@ public class InputEngine {
 			System.out.println("Tickets were added to your basket. If you would like to see what");
 			System.out.println("is in your basket type: 'see basket'. Alternatively if you would");
 			System.out.println("like to checkout type: 'checkout'.");
-			System.out.println("Or if you would like to search for more shows, type 'back'");
+			System.out.println("Or if you would like to search for more shows, type 'main menu'");
 			System.out.println();
 			System.out.print("> ");
 			
@@ -416,6 +366,8 @@ public class InputEngine {
 	public void getBasket() {
 		System.out.println("Your basket contains the following tickets:");
 		//System.out.println(sql.getPerformanceInformation(0));
+		System.out.println();
+		System.out.println(order.getTickets());
 	}
 	
 	/*
