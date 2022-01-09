@@ -334,14 +334,14 @@ public class InputEngine {
 		System.out.println();
 		System.out.print("> ");
 		
-		int purchaserCreditCard = Integer.parseInt(reader.getInput());
+		String purchaserCreditCard = reader.getInput();
 		
 		System.out.println("Please type in 'complete order' to complete purchase.");
 		System.out.println();
 		System.out.print("> ");
 		
 		if (reader.getInput().contains("complete order")) {
-			sql.finaliseOrder(
+			String purchaserID = sql.finaliseOrderPurchaser(
 					purchaserName, 
 					purchaserDOB,
 					purchaserAddressHouseNumber,
@@ -351,9 +351,28 @@ public class InputEngine {
 					purchaserAddressPostcode, 
 					purchaserCreditCard);
 			
-			int bookingReference = sql.getBookingReference();
+			for (int i = 0; i < order.getTickets().size(); i++) {
+				String perf = sql.getPerformance(order.getTickets().get(i).get(0));			
+				int seatInt = order.getTickets().get(i).get(1);
+				String seatString = order.getTickets().get(i).get(1).toString();
+				String conc = order.getTickets().get(i).get(2).toString();
+				String stalls;
+				
+				if (seatInt <= 120 && seatInt >= 1) {
+					stalls = "True";
+				} else { 
+					stalls = "False";
+				}
+				
+				sql.finaliseOrderBooking(
+						perf,
+						purchaserID,
+						conc,
+						seatString,
+						stalls);
+			}
 			
-			System.out.println("Order has been completed, your booking reference is:" + bookingReference);
+			System.out.println("Order has been completed, your booking reference is:" + purchaserID);
 		} else {
 			System.out.println("Instruction has not been understood.");
 			System.out.println("Please type in 'complete order' to complete purchase.");
@@ -393,10 +412,9 @@ public class InputEngine {
 			}
 			System.out.println();
 			System.out.println("-----------------");
-		}
+		}	
 		
-		
-		System.out.println(order.getTickets());
+		this.loopPurchase();
 	}
 	
 	/*
@@ -412,9 +430,6 @@ public class InputEngine {
 			return true;
 		} else {
 			return false;
-		}
-        
-        
+		}     
     }
-
 }

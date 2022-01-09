@@ -159,9 +159,9 @@ public class SQLConverter {
 	}
 
 	/*
-	 * Finalise order and update SQL database to create a new booking.
+	 * Finalise order and update SQL database to create a new purchaser.
 	 */
-	public void finaliseOrder(
+	public String finaliseOrderPurchaser(
 			String name, 
 			String DOB,
 			String addressHouseNumber,
@@ -169,7 +169,7 @@ public class SQLConverter {
 			String addressCity, 
 			String addressCounty, 
 			String addressPostcode, 
-			int creditCard) {
+			String creditCard) {
 		db.connect(); // open connection
 		
 		mySQLquery = "CALL InsertPurchaser('" 
@@ -180,11 +180,37 @@ public class SQLConverter {
 						+ addressCity + "','"
 						+ addressCounty + "','"
 						+ addressPostcode + "','"
-						+ creditCard + ", @retBool')";
-		db.runQuery(mySQLquery);
+						+ creditCard + "', @retBool)";
+		rs = db.runQuery(mySQLquery);
+		
+		String retVal = resultToString(db.compileResults(rs));
+		
 		db.close(); //close connection
+		
+		return retVal;
 	}
-
+	
+	/*
+	 * Finalise order and update SQL database to create a new booking.
+	 */
+	public void finaliseOrderBooking(
+			String perfID,
+			String purID,
+			String conc,
+			String seatNumber,
+			String stalls) {
+		db.connect();
+		
+		mySQLquery = "CALL SetBooking("
+						+ perfID + ","
+						+ purID + ","
+						+ conc + ","
+						+ stalls + ","
+						+ seatNumber + ")";
+		
+		db.connect();
+	}
+	
 	/*
 	 * Get finalised order details by retrieving the data from the SQL database.
 	 */
