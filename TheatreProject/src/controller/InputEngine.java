@@ -103,9 +103,16 @@ public class InputEngine {
 	private void printWelcome() {
 		System.out.println("Welcome to the Theatre Royal website.");
 		System.out.println("If you would like to see the full catalogue of shows available");
-		System.out.println("type: 'show all shows'");
+		System.out.println("type:");
+		System.out.println();
+		System.out.println("'show all shows' to browse all available shows");
+		System.out.println();
 		System.out.println("Alternatively, you are able to search for a specific performance");
-		System.out.println("by typing 'search name' or 'search date'"); // added
+		System.out.println("by typing:"); // added
+		System.out.println();
+		System.out.println("'search name' to search by name");
+		System.out.println("'search date' to search by date");
+		System.out.println();
 		/*System.out.println("by typing in the name of the show");
 		System.out.println("If you would like to check an existing order, type in your");
 		System.out.println("booking reference.");*/

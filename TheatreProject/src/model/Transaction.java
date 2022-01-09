@@ -14,6 +14,7 @@ public class Transaction {
 	 */
 	public Transaction() {
 		booking = new ArrayList<ArrayList<Integer>>();
+		booking.add(new ArrayList<Integer>());
 	}
 
 	/*
