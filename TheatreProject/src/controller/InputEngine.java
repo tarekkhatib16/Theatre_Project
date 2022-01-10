@@ -105,6 +105,26 @@ public class InputEngine {
 		System.out.print("> ");
 	}
 	
+	private void mainMenu() {
+		System.out.println("If you would like to see the full catalogue of shows available");
+		System.out.println("type:");
+		System.out.println();
+		System.out.println("'show all shows' to browse all available shows");
+		System.out.println();
+		System.out.println("Alternatively, you are able to search for a specific performance");
+		System.out.println("by typing:"); 
+		System.out.println();
+		System.out.println("'search name' to search by name");
+		System.out.println("'search date' to search by date");
+		System.out.println();
+		System.out.println("If you would like to check an existing order, type in your");
+		System.out.println("booking reference.");
+		System.out.println();
+		System.out.println("Finally, if you would like to quit the application type in 'quit'.");
+		System.out.println();
+		System.out.print("> ");
+	}
+	
 	/*
 	 * Method to show all available shows based on search term.
 	 */
@@ -161,7 +181,7 @@ public class InputEngine {
 		System.out.println();
 		System.out.print("> ");
 		
-		int eventID = Integer.parseInt(reader.getInput());
+		String eventID = reader.getInput();
 
 		System.out.println("Event Selected");
 		System.out.println();
@@ -190,11 +210,8 @@ public class InputEngine {
 			}
 			else{
 				System.out.println("try again");
-			}
-			
-			
-		}
-		
+			}					
+		}		
 	}
 
 	/*
@@ -206,7 +223,7 @@ public class InputEngine {
 		System.out.println();
 		System.out.print("> ");
 		
-		int performanceID = Integer.parseInt(reader.getInput());
+		String performanceID = reader.getInput();
 		
 		System.out.println("How many tickets would you like to buy?");
 		System.out.println();
@@ -220,16 +237,32 @@ public class InputEngine {
 		
 		int concessionary = Integer.parseInt(reader.getInput());
 		
-		int seatNumber = sql.getNextSeat();
+		System.out.println("Type in stalls for stalls seats and circle for circle seats.");
+		System.out.println();
+		System.out.print("> ");
+		
+		String input = reader.getInput();
+		Boolean stalls = true;
+		
+		if (input.contains("stalls")) {
+			stalls = true;
+		} else if (input.contains("circle")) {
+			stalls = false;
+		}
+		
+		String seatNumber = sql.getNextSeat(performanceID, stalls);
+		int seatNumberInt = Integer.parseInt(seatNumber.replaceAll("\\D", ""));
 		
 		for (int i = 0; i < numberOfTickets; i++) {
 			if (concessionary > 0) {
-				order.addTickets(performanceID, seatNumber, 1);
+				order.addTickets(performanceID, seatNumber, "TRUE");
 				concessionary--;
-				seatNumber++;
+				seatNumberInt--;
+				seatNumber = Integer.toString(seatNumberInt);
 			} else {
-				order.addTickets(performanceID, seatNumber, 0);
-				seatNumber++;
+				order.addTickets(performanceID, seatNumber, "FALSE");
+				seatNumberInt--;
+				seatNumber = Integer.toString(seatNumberInt);
 			}
 		}
 		
@@ -267,7 +300,13 @@ public class InputEngine {
 	 * Method to get finalised order.
 	 */
 	public void getOrder() {
-		sql.getOrderDetails();
+		System.out.println("Please type in your Booking Reference Number");
+		System.out.println();
+		System.out.println(">");
+		
+		String bookingReference = reader.getInput();
+		
+		sql.getOrderDetails(bookingReference);
 	}
 
 	/*
@@ -352,30 +391,60 @@ public class InputEngine {
 					purchaserCreditCard);
 			
 			for (int i = 0; i < order.getTickets().size(); i++) {
-				String perf = sql.getPerformance(order.getTickets().get(i).get(0));			
-				int seatInt = order.getTickets().get(i).get(1);
+				String perf = order.getTickets().get(i).get(0);			
+				int seatInt = Integer.parseInt(order.getTickets().get(i).get(1).replaceAll("\\D", "")); 
 				String seatString = order.getTickets().get(i).get(1).toString();
 				String conc = order.getTickets().get(i).get(2).toString();
 				String stalls;
 				
 				if (seatInt <= 120 && seatInt >= 1) {
-					stalls = "True";
+					stalls = "TRUE";
 				} else { 
-					stalls = "False";
+					stalls = "FALSE";
 				}
 				
 				sql.finaliseOrderBooking(
 						perf,
 						purchaserID,
 						conc,
-						seatString,
-						stalls);
+						stalls,
+						seatString);
 			}
 			
-			System.out.println("Order has been completed, your booking reference is:" + purchaserID);
+			System.out.println("Order has been completed, your booking reference is: " + purchaserID);
+			System.out.println("If you would like to search for more shows, type 'main menu'.");
+			System.out.println("Alternatively if you would like to quit the application type 'quit'.");
+			System.out.println();
+			System.out.print("> ");
+			
+			String input = reader.getInput();
+			
+			Boolean finished = false;
+			
+			while (!finished) {
+			
+				if (input.contains("main menu")) {
+					this.mainMenu();
+					finished = true;
+				} else if (input.contains("quit")) {
+					this.quit();
+					finished = true;
+				} else {
+					System.out.println("Instruction has not been understood.");
+					System.out.println("If you would like to search for more shows, type 'main menu'.");
+					System.out.println("Alternatively if you would like to quit the application type 'quit'.");
+					System.out.println();
+					System.out.print("> ");
+					
+					input = reader.getInput();
+				}
+			}
+
 		} else {
 			System.out.println("Instruction has not been understood.");
 			System.out.println("Please type in 'complete order' to complete purchase.");
+			System.out.println();
+			System.out.print("> ");
 		}
 	}
 
@@ -398,16 +467,16 @@ public class InputEngine {
 			System.out.println();
 			
 			System.out.print("Seat Number: ");			
-			int seat = order.getTickets().get(i).get(1);
+			String seat = order.getTickets().get(i).get(1);
 			System.out.print(seat);
 			System.out.println();
 			
 			System.out.print("Concessionary? ");
-			int conc = order.getTickets().get(i).get(2);
+			String conc = order.getTickets().get(i).get(2);
 			
-			if (conc == 1) {
+			if (conc == "TRUE") {
 				System.out.print("Yes");
-			} else if (conc == 0) {
+			} else if (conc == "FALSE") {
 				System.out.print("No");
 			}
 			System.out.println();

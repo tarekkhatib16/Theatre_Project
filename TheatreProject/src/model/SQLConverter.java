@@ -18,13 +18,6 @@ public class SQLConverter {
 	 * Constructor
 	 */
 	public SQLConverter() {
-		//db.connect(); // Commented out, unreliable results returned if connection kept open
-		//will open at beginning of function then close
-		/*while (!finished) { //infinite loop
-			db.connect();
-		}
-		
-		db.close();*/
 	}
 	
 	/*
@@ -85,10 +78,10 @@ public class SQLConverter {
 	/*
 	 * Method to get performance information using performance ID
 	 */
-	public String getPerformance(int PerfID) {
+	public String getPerformance(String eventID) {
 		db.connect();
 		
-		mySQLquery = "CALL GetPerfInfo("+String.valueOf(PerfID)+")";
+		mySQLquery = "CALL GetPerfInfo("+eventID+")";
 		rs = db.runQuery(mySQLquery);
 		
 		String retVal = resultToString(db.compileResults(rs));
@@ -100,10 +93,10 @@ public class SQLConverter {
 	/*
 	 * Method to get Event Name information using performance ID
 	 */
-	public String getEventFromPerformance(int PerfID) {
+	public String getEventFromPerformance(String perfID) {
 		db.connect();
 		
-		mySQLquery = "CALL GetEventIDFromPerf("+String.valueOf(PerfID)+")";
+		mySQLquery = "CALL GetEventIDFromPerf("+perfID+")";
 		rs = db.runQuery(mySQLquery);
 		
 		String retVal = resultToString(db.compileResults(rs));
@@ -184,8 +177,6 @@ public class SQLConverter {
 		rs = db.runQuery(mySQLquery);
 		String retVal = resultToString(db.compileResults(rs));
 		
-		System.out.print(retVal);
-		
 		db.close(); //close connection
 		
 		return retVal;
@@ -198,8 +189,8 @@ public class SQLConverter {
 			String perfID,
 			String purID,
 			String conc,
-			String seatNumber,
-			String stalls) {
+			String stalls,
+			String seatNumber) {
 		db.connect();
 		
 		mySQLquery = "CALL SetBooking("
@@ -209,26 +200,31 @@ public class SQLConverter {
 						+ stalls + ","
 						+ seatNumber + ")";
 		
+		rs = db.runQuery(mySQLquery);
+		
 		db.connect();
 	}
 	
 	/*
 	 * Get finalised order details by retrieving the data from the SQL database.
 	 */
-	public void getOrderDetails() {
+	public String getOrderDetails(String bookingReference) {
 		db.connect(); // open connection
 		
-		rs = db.runQuery("");
-		db.close(); //close connection
+		String query = "CALL GetPurchase("+bookingReference+")";
 		
-		printResults();
+		rs = db.runQuery(query);
+		db.printResults(rs);
+		String retVal = resultToString(db.compileResults(rs));
+		db.close();
 		
+		return retVal;
 	}
 	
-	public String GetEventInfo(int evtID) {
+	public String GetEventInfo(String eventID) {
 		db.connect(); // open connection
 		
-		String query = "Call GetEventInfo("+ String.valueOf(evtID) + ")";
+		String query = "Call GetEventInfo("+ eventID + ")";
 		
 		rs = db.runQuery(query);
 		String retVal = resultToString(db.compileResults(rs));
@@ -237,10 +233,10 @@ public class SQLConverter {
 		return retVal;
 	}
 	
-	public String getPerformances(int eventID) {
+	public String getPerformances(String eventID) {
 		db.connect(); // open connection
 		
-		String query = "Call GetPerformances("+ String.valueOf(eventID) + ")";
+		String query = "Call GetPerformances(" + eventID + ")";
 		
 		rs = db.runQuery(query);
 		String retVal = resultToString(db.compileResults(rs));
@@ -252,25 +248,15 @@ public class SQLConverter {
 	/*
 	 * Method to get the next available seat number for a specific performance ID.
 	 */
-	public int getNextSeat() {
-		//for future development
-		//db.connect(); // open connection
-		//db.runQuery("");
-		//db.close(); //close connection
+	public String getNextSeat(String perfID, Boolean stalls) {
+		db.connect();
+		String mySQLquery = "Call GetNextSeat(" + perfID + "," 
+							+ String.valueOf(stalls) +")";
+		rs = db.runQuery(mySQLquery);
+		String retVal = resultToString(db.compileResults(rs)).replaceAll("(?m)^\\s+", "");
+		db.close();
 		
-		return 1;
-	}
-	
-	/*
-	 * Method to get booking reference given all other information.
-	 */
-	public int getBookingReference() {
-		db.connect(); // open connection
-		
-		db.runQuery("");
-		
-		db.close(); //close connection
-		return 5;
+		return retVal;
 	}
 	
 	private void printResults() {// print the results set
