@@ -139,12 +139,14 @@ public class DBConnector {
 	}
 
 	public void close() {
-		try {
-			conn.close();
-			//System.out.println("Connection closed.");
-		} catch (SQLException e) {
-			System.out.println("Connection not closed.");
-			e.printStackTrace();
+		if (this.conn != null){
+			try {
+				conn.close();
+				//System.out.println("Connection closed.");
+			} catch (SQLException e) {
+				System.out.println("Connection not closed.");
+				e.printStackTrace();
+			}
 		}
 	}
 

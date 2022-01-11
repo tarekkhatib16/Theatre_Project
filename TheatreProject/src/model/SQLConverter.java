@@ -18,6 +18,7 @@ public class SQLConverter {
 	 * Constructor
 	 */
 	public SQLConverter() {
+
 	}
 	
 	/*
@@ -78,10 +79,10 @@ public class SQLConverter {
 	/*
 	 * Method to get performance information using performance ID
 	 */
-	public String getPerformance(String eventID) {
+	public String getPerformance(String EventID) {
 		db.connect();
 		
-		mySQLquery = "CALL GetPerfInfo("+eventID+")";
+		mySQLquery = "CALL GetPerfInfo("+EventID+")";
 		rs = db.runQuery(mySQLquery);
 		
 		String retVal = resultToString(db.compileResults(rs));
@@ -104,7 +105,6 @@ public class SQLConverter {
 		
 		return retVal;
 	}
-	
 	
 	/*
 	 * Method to get Event Name information using performance ID
@@ -202,23 +202,23 @@ public class SQLConverter {
 	 * Finalise order and update SQL database to create a new booking.
 	 */
 	public void finaliseOrderBooking(
-			String perfID,
-			String purID,
-			String conc,
-			String stalls,
-			String seatNumber) {
+		String perfID,
+		String purID,
+		String conc,
+		String stalls,
+		String seatNumber) {
 		db.connect();
 		
 		mySQLquery = "CALL SetBooking("
-						+ perfID + ","
-						+ purID + ","
-						+ conc + ","
-						+ stalls + ","
-						+ seatNumber + ")";
+					+ perfID + ","
+					+ purID + ","
+					+ conc + ","
+					+ stalls + ","
+					+ seatNumber + ")";
 		
 		rs = db.runQuery(mySQLquery);
 		
-		db.connect();
+		db.close();
 	}
 	
 	/*
@@ -231,6 +231,12 @@ public class SQLConverter {
 		
 		rs = db.runQuery(query);
 		String retVal = resultToString(db.compileResults(rs));
+		query = "CALL GetPurchaseTickets("+bookingReference+")";
+		db.close();
+		
+		db.connect();
+		rs = db.runQuery(query);
+		retVal += resultToString(db.compileResults(rs));
 		db.close();
 		
 		return retVal;
@@ -254,7 +260,7 @@ public class SQLConverter {
 	public String getPerformances(String eventID) {
 		db.connect(); // open connection
 		
-		String query = "Call GetPerformances(" + eventID + ")";
+		String query = "Call GetPerformances("+eventID+ ")";
 		
 		rs = db.runQuery(query);
 		String retVal = resultToString(db.compileResults(rs));
@@ -275,6 +281,19 @@ public class SQLConverter {
 		db.close();
 		
 		return retVal;
+		
+	}
+	
+	/*
+	 * Method to get booking reference given all other information.
+	 */
+	public int getBookingReference() {
+		db.connect(); // open connection
+		
+		db.runQuery("");
+		
+		db.close(); //close connection
+		return 5;
 	}
 	
 	private void printResults() {// print the results set

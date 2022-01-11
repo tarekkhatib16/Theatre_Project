@@ -3,6 +3,8 @@ package controller;
 import util.InputReader;
 import model.Transaction;
 
+import java.util.ArrayList;
+
 import model.SQLConverter;
 
 public class InputEngine {
@@ -46,9 +48,10 @@ public class InputEngine {
 
 		boolean finished = false;
 		
-		printWelcome();
 		
 		while (!finished) {
+			printWelcome();
+			
 			String input = reader.getInput().toLowerCase();
 
 			if (input.contains("show all shows")) {
@@ -77,8 +80,6 @@ public class InputEngine {
 			}
 			else {
 				System.out.println("command not valid, enter again");
-				System.out.println();
-				System.out.print("> ");
 			}
 		}
 	}
@@ -88,22 +89,7 @@ public class InputEngine {
 	 */
 	private void printWelcome() {
 		System.out.println("Welcome to the Theatre Royal website.");
-		System.out.println("If you would like to see the full catalogue of shows available");
-		System.out.println("type:");
-		System.out.println();
-		System.out.println("'show all shows' to browse all available shows");
-		System.out.println();
-		System.out.println("Alternatively, you are able to search for a specific performance");
-		System.out.println("by typing:"); 
-		System.out.println();
-		System.out.println("'search name' to search by name");
-		System.out.println("'search date' to search by date");
-		System.out.println();
-		System.out.println("If you would like to check an existing order, type in 'see order'");
-		System.out.println();
-		System.out.println("Finally, if you would like to quit the application type in 'quit'.");
-		System.out.println();
-		System.out.print("> ");
+		this.mainMenu();
 	}
 	
 	private void mainMenu() {
@@ -118,8 +104,8 @@ public class InputEngine {
 		System.out.println("'search name' to search by name");
 		System.out.println("'search date' to search by date");
 		System.out.println();
-		System.out.println("If you would like to check an existing order, type in your");
-		System.out.println("booking reference.");
+		System.out.println("If you would like to check an existing order, type in");
+		System.out.println("'see order'");
 		System.out.println();
 		System.out.println("Finally, if you would like to quit the application type in 'quit'.");
 		System.out.println();
@@ -211,8 +197,11 @@ public class InputEngine {
 			}
 			else{
 				System.out.println("try again");
-			}					
-		}		
+			}
+			
+			
+		}
+		
 	}
 
 	/*
@@ -264,22 +253,22 @@ public class InputEngine {
 			seatNumber = Integer.toString(seatNumberInt);
 		}
 		
-		for (int i = 0; i < numberOfTickets; i++) {
-			if (concessionary > 0) {
-				order.addTickets(performanceID, seatNumber, "TRUE");
-				concessionary--;
-				seatNumberInt--;
-				seatNumber = Integer.toString(seatNumberInt);
-			} else {
-				order.addTickets(performanceID, seatNumber, "FALSE");
-				seatNumberInt--;
-				seatNumber = Integer.toString(seatNumberInt);
+			for (int i = 0; i < numberOfTickets; i++) {
+				if (concessionary > 0) {
+					order.addTickets(performanceID, seatNumber, "TRUE");
+					concessionary--;
+					seatNumberInt--;
+					seatNumber = Integer.toString(seatNumberInt);
+				} else {
+					order.addTickets(performanceID, seatNumber, "FALSE");
+					seatNumberInt--;
+					seatNumber = Integer.toString(seatNumberInt);
+				}
 			}
+			
+			this.loopPurchase(totalPrice);
 		}
-		
-		this.loopPurchase(totalPrice);
-	}
-	
+
 	/*
 	 * method to loop, buy more tickets, check basket or checkout
 	 */
@@ -301,11 +290,12 @@ public class InputEngine {
 			} else if (input.contains("checkout")) {
 				retToMain = true; //reset to break out of loop on return
 				this.finaliseOrder();
-			} else if (input.contains("back")) {
+			} else if (input.contains("main menu")) {
 				retToMain = true;
 			}
 		}
 	}
+
 
 	/*
 	 * Method to get finalised order.
@@ -317,7 +307,7 @@ public class InputEngine {
 		
 		String bookingReference = reader.getInput();
 		
-		sql.getOrderDetails(bookingReference);
+		System.out.println(sql.getOrderDetails(bookingReference));
 	}
 
 	/*

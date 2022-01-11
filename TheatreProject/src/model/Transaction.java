@@ -26,11 +26,11 @@ public class Transaction {
 	/*
 	 * Method to add ticket information to 3D ArrayList 'tickets'.
 	 */
-	public void addTickets(String x, String y, String z) {
+	public void addTickets(String perfID, String seatNum, String Concession) {
 		booking.add(new ArrayList<String>());
-		booking.get(booking.size()-1).add(0, x);
-		booking.get(booking.size()-1).add(1, y);
-		booking.get(booking.size()-1).add(2, z);
+		booking.get(booking.size()-1).add(0, perfID);
+		booking.get(booking.size()-1).add(1, seatNum);
+		booking.get(booking.size()-1).add(2, Concession);
 	}
 
 }
