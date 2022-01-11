@@ -77,6 +77,8 @@ public class InputEngine {
 			}
 			else {
 				System.out.println("command not valid, enter again");
+				System.out.println();
+				System.out.print("> ");
 			}
 		}
 	}
@@ -97,8 +99,7 @@ public class InputEngine {
 		System.out.println("'search name' to search by name");
 		System.out.println("'search date' to search by date");
 		System.out.println();
-		System.out.println("If you would like to check an existing order, type in your");
-		System.out.println("booking reference.");
+		System.out.println("If you would like to check an existing order, type in 'see order'");
 		System.out.println();
 		System.out.println("Finally, if you would like to quit the application type in 'quit'.");
 		System.out.println();
@@ -203,7 +204,7 @@ public class InputEngine {
 			
 			if (input.contains("add tickets")) {
 				retToMain = true; //reset to break out of loop on return from addTickets
-				addTickets();
+				addTickets(eventID);
 			}
 			else if (input.contains("back")) {
 				retToMain = true;
@@ -217,7 +218,7 @@ public class InputEngine {
 	/*
 	 * Method to add tickets to the transaction basket.
 	 */
-	public void addTickets() {
+	public void addTickets(String eventID) {
 		
 		System.out.println("Enter performanceID of performance you want to book");
 		System.out.println();
@@ -250,8 +251,18 @@ public class InputEngine {
 			stalls = false;
 		}
 		
+		int price = Integer.parseInt(sql.getPerformancePrice(eventID, stalls).replaceAll("\\D", ""));
+		
+		double totalPrice = ((price/100) * numberOfTickets) - (0.25 * (price/100) * concessionary);
+		
 		String seatNumber = sql.getNextSeat(performanceID, stalls);
+		
 		int seatNumberInt = Integer.parseInt(seatNumber.replaceAll("\\D", ""));
+		
+		if (!stalls) {
+			seatNumberInt += 120;
+			seatNumber = Integer.toString(seatNumberInt);
+		}
 		
 		for (int i = 0; i < numberOfTickets; i++) {
 			if (concessionary > 0) {
@@ -266,13 +277,13 @@ public class InputEngine {
 			}
 		}
 		
-		this.loopPurchase();
+		this.loopPurchase(totalPrice);
 	}
 	
 	/*
 	 * method to loop, buy more tickets, check basket or checkout
 	 */
-	private void loopPurchase() {
+	private void loopPurchase(double totalPrice) {
 		boolean retToMain = false;
 		while (!retToMain) {
 			System.out.println("Tickets were added to your basket. If you would like to see what");
@@ -286,7 +297,7 @@ public class InputEngine {
 			
 			if (input.contains("see basket")) {
 				retToMain = true; //reset to break out of loop on return
-				this.getBasket();
+				this.getBasket(totalPrice);
 			} else if (input.contains("checkout")) {
 				retToMain = true; //reset to break out of loop on return
 				this.finaliseOrder();
@@ -302,7 +313,7 @@ public class InputEngine {
 	public void getOrder() {
 		System.out.println("Please type in your Booking Reference Number");
 		System.out.println();
-		System.out.println(">");
+		System.out.print(">");
 		
 		String bookingReference = reader.getInput();
 		
@@ -313,7 +324,7 @@ public class InputEngine {
 	 * Method to finalise order in basket (i.e. check-out).
 	 */
 	public void finaliseOrder() {
-		System.out.println("Please type in your name.");
+		System.out.println("Please type in your full name.");
 		System.out.println();
 		System.out.print("> ");
 		
@@ -451,7 +462,7 @@ public class InputEngine {
 	/*
 	 * Method to get contents of the basket.
 	 */
-	public void getBasket() {
+	public void getBasket(double Price) {
 		System.out.println("Your basket contains the following tickets:");
 		//System.out.println(sql.getPerformanceInformation(0));
 		System.out.println();
@@ -481,9 +492,15 @@ public class InputEngine {
 			}
 			System.out.println();
 			System.out.println("-----------------");
-		}	
+		}
 		
-		this.loopPurchase();
+		String totalPrice = Double.toString(Price);
+		
+		System.out.println("Your total price is: " + totalPrice);
+		System.out.println("-----------------");
+		System.out.println();
+		
+		this.loopPurchase(Price);
 	}
 	
 	/*

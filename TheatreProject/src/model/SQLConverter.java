@@ -91,6 +91,22 @@ public class SQLConverter {
 	}
 	
 	/*
+	 * Method to get the price of the tickets using event ID
+	 */
+	public String getPerformancePrice(String eventID, Boolean Stalls) {
+		db.connect();
+		
+		mySQLquery = "CALL GetPerfPrice("+eventID+","+Stalls+")";
+		rs = db.runQuery(mySQLquery);
+		
+		String retVal = resultToString(db.compileResults(rs));
+		db.close();
+		
+		return retVal;
+	}
+	
+	
+	/*
 	 * Method to get Event Name information using performance ID
 	 */
 	public String getEventFromPerformance(String perfID) {
@@ -214,13 +230,15 @@ public class SQLConverter {
 		String query = "CALL GetPurchase("+bookingReference+")";
 		
 		rs = db.runQuery(query);
-		db.printResults(rs);
 		String retVal = resultToString(db.compileResults(rs));
 		db.close();
 		
 		return retVal;
 	}
 	
+	/*
+	 * Get event info using event ID
+	 */
 	public String GetEventInfo(String eventID) {
 		db.connect(); // open connection
 		
