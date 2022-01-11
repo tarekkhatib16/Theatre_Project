@@ -141,7 +141,10 @@ IN CreditCard VARCHAR(19) -- remove all spaces, credit card either 16 or 19 digi
         
         SELECT LAST_INSERT_ID() FROM Purchasers LIMIT 1;
 	END; //
-    
+
+/*
+Procedure to return booking info given a booking reference.
+*/    
 DROP PROCEDURE IF EXISTS finalprojecttheatre.GetPurchase//
 CREATE PROCEDURE GetPurchase(IN PurID INT)
 	BEGIN
@@ -170,6 +173,19 @@ CREATE PROCEDURE GetPerfInfo(IN PerfID INT)
 		SELECT Performances.PerformanceStart
 		FROM Performances
 		WHERE Performances.PerformanceID = PerfID;
+	END; //
+    
+/*
+Procedure to return info on specific performance
+*/
+DROP PROCEDURE IF EXISTS finalprojecttheatre.GetPerfPrice//
+CREATE PROCEDURE GetPerfPrice(IN EventID INT, IN Stalls BOOL)
+	BEGIN
+		SELECT IF (Stalls=TRUE,
+			(SELECT EventInfo.PricePenceStall FROM EventInfo
+				WHERE EventInfo.EventID = EventID),
+			(SELECT EventInfo.PricePenceCircle FROM EventInfo
+				WHERE EventInfo.EventID = EventID));
 	END; //
 
 DROP PROCEDURE IF EXISTS finalprojecttheatre.GetEventIDFromPerf//
